@@ -1,0 +1,1954 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BIKE DILADO | Used Bike Showroom Management Software</title>
+  <meta name="description" content="Complete Used Two-Wheeler Showroom ERP - Stock Inventory, Quick Listing, GST Billing, Delivery Invoicing, Profit Calculation & RTO Paper Tracking.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- App Container -->
+  <div class="app-layout">
+    
+    <!-- Top Navigation Bar -->
+    <header class="top-nav">
+      <div class="nav-brand">
+        <div class="brand-logo-icon">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="5.5" cy="17.5" r="3.5"/>
+            <circle cx="18.5" cy="17.5" r="3.5"/>
+            <path d="M15 6h-5a2 2 0 0 0-2 2v4h4.5l1.5-3.5h3.5"/>
+            <path d="m9 12 3-5h3"/>
+            <circle cx="12" cy="7" r="1"/>
+            <path d="M5.5 17.5 9 12"/>
+            <path d="m15 12 3.5 5.5"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <div class="brand-title-wrap">
+            <span class="brand-name">BIKE DILADO</span>
+            <span class="badge-tag">PRO SHOWROOM OS</span>
+          </div>
+          <p class="brand-subtitle">Smart Two-Wheeler Dealership & Accounts Suite</p>
+        </div>
+      </div>
+
+      <!-- Quick Stats in Nav -->
+      <div class="nav-stats-bar">
+        <div class="quick-stat-pill" title="Live Available Inventory">
+          <span class="dot-indicator green"></span>
+          <span class="stat-lbl">In Stock:</span>
+          <span class="stat-val" id="navStockCount">0</span>
+        </div>
+        <div class="quick-stat-pill" title="Aging Inventory > 30 Days">
+          <span class="dot-indicator red"></span>
+          <span class="stat-lbl">Aging Stock:</span>
+          <span class="stat-val" id="navAgingCount">0</span>
+        </div>
+        <div class="quick-stat-pill" title="Active Customer Leads">
+          <span class="dot-indicator purple"></span>
+          <span class="stat-lbl">Leads:</span>
+          <span class="stat-val" id="navLeadsCount">0</span>
+        </div>
+        <div class="quick-stat-pill" title="Total Bikes Sold">
+          <span class="dot-indicator blue"></span>
+          <span class="stat-lbl">Sold:</span>
+          <span class="stat-val" id="navSoldCount">0</span>
+        </div>
+        <div class="quick-stat-pill" title="Total Realized Gross Margin">
+          <span class="dot-indicator amber"></span>
+          <span class="stat-lbl">Net Profit:</span>
+          <span class="stat-val" id="navTotalProfit">₹0</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons & Tools -->
+      <div class="nav-actions">
+        <!-- Theme Toggle -->
+        <button class="btn btn-ghost icon-only-btn" id="themeToggleBtn" title="Toggle Day / Night Mode">
+          <span id="themeToggleIcon">☀️</span>
+        </button>
+
+        <button class="btn btn-outline" id="btnQuickBilling">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="12" y1="18" x2="12" y2="12"/>
+            <line x1="9" y1="15" x2="15" y2="15"/>
+          </svg>
+          New Bill
+        </button>
+        <button class="btn btn-primary" id="btnOpenAddBikeModal">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="16"/>
+            <line x1="8" y1="12" x2="16" y2="12"/>
+          </svg>
+          Add Bike Stock
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content Area with Tabs -->
+    <div class="main-body">
+      <!-- Sidebar Nav Navigation Tabs -->
+      <aside class="app-sidebar">
+        <nav class="sidebar-menu">
+          <button class="tab-btn active" data-tab="tab-dashboard">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="9"/>
+              <rect x="14" y="3" width="7" height="5"/>
+              <rect x="14" y="12" width="7" height="9"/>
+              <rect x="3" y="16" width="7" height="5"/>
+            </svg>
+            <span>Dashboard</span>
+          </button>
+          
+          <button class="tab-btn" data-tab="tab-stock">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="5.5" cy="17.5" r="3.5"/>
+              <circle cx="18.5" cy="17.5" r="3.5"/>
+              <path d="M15 6h-5a2 2 0 0 0-2 2v4h4.5l1.5-3.5h3.5"/>
+              <path d="m9 12 3-5h3"/>
+            </svg>
+            <span>Bike Inventory</span>
+            <span class="menu-counter" id="badgeStockCount">0</span>
+          </button>
+
+          <button class="tab-btn" data-tab="tab-billing">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10 9 9 9 8 9"/>
+            </svg>
+            <span>Billing & Invoicing</span>
+          </button>
+
+          <button class="tab-btn" data-tab="tab-sold">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            <span>Sold Bikes Details</span>
+            <span class="menu-counter sold" id="badgeSoldCount">0</span>
+          </button>
+
+          <button class="tab-btn" data-tab="tab-leads">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            <span>Customer Leads CRM</span>
+            <span class="menu-counter purple" id="badgeLeadsCount">0</span>
+          </button>
+
+          <button class="tab-btn" data-tab="tab-calculator">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+              <line x1="8" y1="6" x2="16" y2="6"></line>
+              <line x1="16" y1="14" x2="16" y2="18"></line>
+              <path d="M16 10h.01"></path>
+              <path d="M12 10h.01"></path>
+              <path d="M8 10h.01"></path>
+              <path d="M12 14h.01"></path>
+              <path d="M8 14h.01"></path>
+              <path d="M12 18h.01"></path>
+              <path d="M8 18h.01"></path>
+            </svg>
+            <span>EMI & Loan Desk</span>
+          </button>
+
+          <button class="tab-btn" data-tab="tab-procure">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            </svg>
+            <span>Purchase Vouchers</span>
+          </button>
+
+          <button class="tab-btn" data-tab="tab-settings">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+            <span>Showroom Settings</span>
+          </button>
+        </nav>
+
+        <!-- Showroom Support / Badge Box -->
+        <div class="sidebar-footer-card">
+          <div class="sf-icon">🏍️</div>
+          <div class="sf-info">
+            <h4 id="sidebarShowroomName">BIKE DILADO</h4>
+            <p>Certified Pre-Owned Hub</p>
+          </div>
+          <div class="sf-actions-row">
+            <button class="btn btn-xs btn-ghost" id="btnExportDataPrompt" title="Backup Database">
+              💾 Backup
+            </button>
+            <button class="btn btn-xs btn-ghost" onclick="printDailyReport()" title="Print Today's Summary">
+              🖨️ Daily Summary
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Center Main Scrollable Content -->
+      <main class="content-viewport">
+
+        <!-- ============================================== -->
+        <!-- TAB 1: DASHBOARD VIEW                          -->
+        <!-- ============================================== -->
+        <section id="tab-dashboard" class="tab-panel active">
+          <div class="section-header">
+            <div>
+              <h1 class="page-title">Dealership Executive Dashboard</h1>
+              <p class="page-desc">Real-time health of your used two-wheeler showroom, floor velocity, leads & profit analytics.</p>
+            </div>
+            <div class="header-tools">
+              <span class="live-clock" id="liveClockDisplay">Live Time</span>
+            </div>
+          </div>
+
+          <!-- Hero KPI Cards -->
+          <div class="kpi-grid">
+            <div class="kpi-card card-stock">
+              <div class="kpi-top">
+                <span class="kpi-label">Active Stock in Showroom</span>
+                <div class="kpi-icon-badge icon-green">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/>
+                    <path d="M15 6h-5a2 2 0 0 0-2 2v4h4.5l1.5-3.5h3.5"/><path d="m9 12 3-5h3"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="kpi-val" id="kpiActiveStock">0</div>
+              <div class="kpi-footer">
+                <span class="kpi-sub" id="kpiServicingCount">0 under servicing / inspection</span>
+              </div>
+            </div>
+
+            <div class="kpi-card card-investment">
+              <div class="kpi-top">
+                <span class="kpi-label">Inventory Investment (At Cost)</span>
+                <div class="kpi-icon-badge icon-purple">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="kpi-val" id="kpiInventoryCost">₹0</div>
+              <div class="kpi-footer">
+                <span class="kpi-sub" id="kpiListingValue">Potential Sales Value: ₹0</span>
+              </div>
+            </div>
+
+            <div class="kpi-card card-revenue">
+              <div class="kpi-top">
+                <span class="kpi-label">Total Bikes Sold</span>
+                <div class="kpi-icon-badge icon-blue">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="kpi-val" id="kpiBikesSold">0</div>
+              <div class="kpi-footer">
+                <span class="kpi-sub" id="kpiTotalRevenue">Revenue: ₹0</span>
+              </div>
+            </div>
+
+            <div class="kpi-card card-profit">
+              <div class="kpi-top">
+                <span class="kpi-label">Showroom Gross Profit</span>
+                <div class="kpi-icon-badge icon-amber">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="12" y1="1" x2="12" y2="23"/>
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                  </svg>
+                </div>
+              </div>
+              <div class="kpi-val highlight" id="kpiNetProfit">₹0</div>
+              <div class="kpi-footer">
+                <span class="kpi-sub" id="kpiProfitMargin">Avg. Margin: 0% per unit</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Secondary Operational KPIs -->
+          <div class="op-kpi-bar">
+            <div class="op-kpi-pill">
+              <span class="op-icon">⏳</span>
+              <div>
+                <span class="op-label">Aging Stock (>30 Days):</span>
+                <strong class="op-val" id="opAgingVal">0 Units</strong>
+              </div>
+            </div>
+            <div class="op-kpi-pill">
+              <span class="op-icon">👥</span>
+              <div>
+                <span class="op-label">Open Customer Inquiries:</span>
+                <strong class="op-val" id="opLeadsVal">0 Leads</strong>
+              </div>
+            </div>
+            <div class="op-kpi-pill">
+              <span class="op-icon">📄</span>
+              <div>
+                <span class="op-label">Pending RTO Paper Transfers:</span>
+                <strong class="op-val" id="opRtoVal">0 Vehicles</strong>
+              </div>
+            </div>
+            <div class="op-kpi-pill">
+              <span class="op-icon">💳</span>
+              <div>
+                <span class="op-label">Pending Balance Receivable:</span>
+                <strong class="op-val" id="opReceivableVal">₹0</strong>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Action Bar -->
+          <div class="dashboard-banner">
+            <div class="banner-content">
+              <h3>Fast Dealership Desk</h3>
+              <p>Execute showroom workflows quickly: add trade-ins, generate GST sale bills, calculate customer EMI quotes, or print handlebar price cards.</p>
+              <div class="banner-buttons">
+                <button class="btn btn-primary" onclick="showAddBikeModal()">+ Add New Trade-in Bike</button>
+                <button class="btn btn-accent" onclick="switchToTab('tab-billing')">⚡ Create Sale Invoice</button>
+                <button class="btn btn-outline" onclick="showAddLeadModal()">👤 New Customer Lead</button>
+                <button class="btn btn-outline" onclick="switchToTab('tab-calculator')">🧮 EMI Loan Desk</button>
+                <button class="btn btn-outline" onclick="switchToTab('tab-procure')">📝 Seller Purchase Voucher</button>
+              </div>
+            </div>
+            <div class="banner-decor">
+              <img src="assets/royal_enfield.jpg" alt="Showroom Classic" class="banner-img">
+            </div>
+          </div>
+
+          <!-- Split Two Column View: Recent In-Stock & Recent Deliveries -->
+          <div class="dash-splits">
+            <!-- Left: Recently Added to Stock -->
+            <div class="glass-panel">
+              <div class="panel-header">
+                <div>
+                  <h3 class="panel-title">Fresh Inventory on Showroom Floor</h3>
+                  <p class="panel-subtitle">Latest additions ready for customer test rides</p>
+                </div>
+                <button class="btn btn-xs btn-outline" onclick="switchToTab('tab-stock')">View All Stock</button>
+              </div>
+              <div class="recent-list" id="dashRecentStockList">
+                <!-- Dynamically rendered -->
+              </div>
+            </div>
+
+            <!-- Right: Recent Sales / Deliveries -->
+            <div class="glass-panel">
+              <div class="panel-header">
+                <div>
+                  <h3 class="panel-title">Recent Customer Deliveries & Margin</h3>
+                  <p class="panel-subtitle">Invoiced bikes, profit realized & RTO status</p>
+                </div>
+                <button class="btn btn-xs btn-outline" onclick="switchToTab('tab-sold')">View All Sold</button>
+              </div>
+              <div class="recent-list" id="dashRecentSalesList">
+                <!-- Dynamically rendered -->
+              </div>
+            </div>
+          </div>
+
+          <!-- Brand Profitability & Inventory Velocity Cards -->
+          <div class="glass-panel mt-4">
+            <div class="panel-header">
+              <div>
+                <h3 class="panel-title">Brand Profitability & Sales Velocity Breakdown</h3>
+                <p class="panel-subtitle">Which motorcycle brands yield the highest margins and fastest turnaround in your showroom</p>
+              </div>
+            </div>
+            <div class="brand-stats-grid" id="dashBrandBreakdown">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- TAB 2: BIKE STOCK & INVENTORY MANAGEMENT       -->
+        <!-- ============================================== -->
+        <section id="tab-stock" class="tab-panel">
+          <div class="section-header">
+            <div>
+              <h1 class="page-title">Bike Stock & Inventory Management</h1>
+              <p class="page-desc">Track showroom inventory, 50-point inspection certificates, workshop repair job cards, days on floor & print handlebar tags.</p>
+            </div>
+            <div class="header-tools">
+              <button class="btn btn-outline" onclick="exportStockToCSV()">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="7 10 12 15 17 10"/>
+                  <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Export Stock CSV
+              </button>
+              <button class="btn btn-primary" onclick="showAddBikeModal()">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="5" x2="12" y2="19"/>
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
+                + Add Bike to Stock
+              </button>
+            </div>
+          </div>
+
+          <!-- Filter & Search Toolbar -->
+          <div class="filter-toolbar">
+            <div class="search-box">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input type="text" id="stockSearchInput" placeholder="Search by Reg No, Brand, Model, Year, Color...">
+            </div>
+
+            <div class="filter-group">
+              <select id="filterStockStatus" class="select-control">
+                <option value="ALL">All Statuses</option>
+                <option value="In Stock" selected>In Stock (Available)</option>
+                <option value="Under Servicing">Under Servicing / Workshop</option>
+                <option value="Booked">Booked / Token Received</option>
+                <option value="Sold">Sold Units</option>
+              </select>
+
+              <select id="filterStockAging" class="select-control">
+                <option value="ALL">All Aging Durations</option>
+                <option value="FRESH">Fresh Stock (&lt; 15 Days)</option>
+                <option value="NORMAL">Standard (15 - 30 Days)</option>
+                <option value="AGING">Aging Stock (&gt; 30 Days)</option>
+              </select>
+
+              <select id="filterStockBrand" class="select-control">
+                <option value="ALL">All Brands</option>
+                <option value="Royal Enfield">Royal Enfield</option>
+                <option value="Yamaha">Yamaha</option>
+                <option value="KTM">KTM</option>
+                <option value="Honda">Honda</option>
+                <option value="Bajaj">Bajaj</option>
+                <option value="TVS">TVS</option>
+                <option value="Hero">Hero</option>
+                <option value="Suzuki">Suzuki</option>
+                <option value="Ather / EV">Ather / EV</option>
+              </select>
+
+              <select id="filterStockSort" class="select-control">
+                <option value="NEWEST">Date Added (Newest)</option>
+                <option value="PRICE_HIGH">Price (High to Low)</option>
+                <option value="PRICE_LOW">Price (Low to High)</option>
+                <option value="KM_LOW">Kilometers (Lowest)</option>
+                <option value="YEAR_NEW">Year (Newest)</option>
+                <option value="AGING_HIGH">Days on Floor (Oldest First)</option>
+              </select>
+
+              <!-- View Switcher (Grid vs Table) -->
+              <div class="view-switch">
+                <button class="view-btn active" id="btnViewGrid" title="Grid Card View">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"/>
+                    <rect x="14" y="3" width="7" height="7"/>
+                    <rect x="14" y="14" width="7" height="7"/>
+                    <rect x="3" y="14" width="7" height="7"/>
+                  </svg>
+                </button>
+                <button class="view-btn" id="btnViewTable" title="Table List View">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="8" y1="6" x2="21" y2="6"/>
+                    <line x1="8" y1="12" x2="21" y2="12"/>
+                    <line x1="8" y1="18" x2="21" y2="18"/>
+                    <line x1="3" y1="6" x2="3.01" y2="6"/>
+                    <line x1="3" y1="12" x2="3.01" y2="12"/>
+                    <line x1="3" y1="18" x2="3.01" y2="18"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stock Grid View Container -->
+          <div id="stockGridContainer" class="bike-card-grid">
+            <!-- Dynamically populated -->
+          </div>
+
+          <!-- Stock Table View Container (Hidden by default) -->
+          <div id="stockTableContainer" class="table-responsive" style="display:none;">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Vehicle Details</th>
+                  <th>Reg Number</th>
+                  <th>Year / KM</th>
+                  <th>Days on Floor</th>
+                  <th>Inspection</th>
+                  <th>Procurement Cost</th>
+                  <th>Asking Price</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="stockTableBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+
+          <div id="stockEmptyState" class="empty-state" style="display: none;">
+            <div class="empty-icon">🏍️</div>
+            <h3>No Bikes Found</h3>
+            <p>No two-wheelers match your filter criteria. Try adjusting the search query or status filter.</p>
+            <button class="btn btn-outline" onclick="resetStockFilters()">Clear Filters</button>
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- TAB 3: BILLING & INVOICE GENERATOR             -->
+        <!-- ============================================== -->
+        <section id="tab-billing" class="tab-panel">
+          <div class="section-header">
+            <div>
+              <h1 class="page-title">Showroom Billing & Delivery Receipt</h1>
+              <p class="page-desc">Create customer sales agreement, calculate loan EMI, settle payment and print official Tax / Delivery Invoice.</p>
+            </div>
+            <div class="header-tools">
+              <span class="badge-tag green">Official Invoice Engine</span>
+            </div>
+          </div>
+
+          <form id="billingForm" class="billing-grid-form" onsubmit="handleGenerateInvoice(event)">
+            <!-- Column 1: Vehicle & Pricing Selection -->
+            <div class="form-card">
+              <h3 class="form-card-title">
+                <span class="step-badge">1</span>
+                Select Bike for Sale
+              </h3>
+
+              <div class="form-group">
+                <label for="billSelectBike">Select Available Bike <span class="req">*</span></label>
+                <select id="billSelectBike" class="form-control" required onchange="onBillingBikeSelected(this.value)">
+                  <option value="">-- Choose In-Stock Two-Wheeler --</option>
+                  <!-- Dynamically populated -->
+                </select>
+                <small class="helper-text">Only shows available in-stock or booked bikes.</small>
+              </div>
+
+              <!-- Bike Preview Card inside Billing -->
+              <div id="billBikeSummary" class="bike-bill-preview" style="display:none;">
+                <div class="bbp-img-wrap">
+                  <img id="bbpImg" src="" alt="Bike Preview">
+                </div>
+                <div class="bbp-details">
+                  <h4 id="bbpTitle">Royal Enfield Classic 350</h4>
+                  <div class="bbp-reg-badge" id="bbpReg">MH 02 EQ 8844</div>
+                  <div class="bbp-meta">
+                    <span id="bbpYear">2022</span> • <span id="bbpKms">12,450 km</span> • <span id="bbpOwners">1st Owner</span>
+                  </div>
+                  <div class="bbp-cost-peek">
+                    Showroom Cost (Purchase + Refurb): <strong id="bbpTotalCost">₹1,49,500</strong>
+                  </div>
+                </div>
+              </div>
+
+              <h4 class="subhead-title">Showroom Pricing & Charges</h4>
+
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label for="billAgreedPrice">Agreed Sale Price (₹) <span class="req">*</span></label>
+                  <input type="number" id="billAgreedPrice" class="form-control" required min="1000" placeholder="175000" oninput="calculateBillingTotals()">
+                </div>
+                <div class="form-group">
+                  <label for="billDiscount">Showroom Discount (₹)</label>
+                  <input type="number" id="billDiscount" class="form-control" min="0" value="0" placeholder="0" oninput="calculateBillingTotals()">
+                </div>
+              </div>
+
+              <div class="form-row-3">
+                <div class="form-group">
+                  <label for="billRtoFee">RTO Transfer Fee (₹)</label>
+                  <input type="number" id="billRtoFee" class="form-control" value="1500" min="0" oninput="calculateBillingTotals()">
+                </div>
+                <div class="form-group">
+                  <label for="billAccessories">Helmet & Kit (₹)</label>
+                  <input type="number" id="billAccessories" class="form-control" value="1200" min="0" oninput="calculateBillingTotals()">
+                </div>
+                <div class="form-group">
+                  <label for="billWarranty">Showroom Warranty (₹)</label>
+                  <input type="number" id="billWarranty" class="form-control" value="0" min="0" oninput="calculateBillingTotals()">
+                </div>
+              </div>
+
+              <!-- Estimated Profit Pill in Real Time -->
+              <div class="profit-indicator-box">
+                <div class="pib-label">Projected Showroom Profit on this Sale:</div>
+                <div class="pib-val" id="billProjectedProfit">₹0</div>
+              </div>
+            </div>
+
+            <!-- Column 2: Customer Information -->
+            <div class="form-card">
+              <h3 class="form-card-title">
+                <span class="step-badge">2</span>
+                Customer / Buyer Particulars
+              </h3>
+
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label for="custName">Customer Full Name <span class="req">*</span></label>
+                  <input type="text" id="custName" class="form-control" required placeholder="e.g. Vikram Malhotra">
+                </div>
+                <div class="form-group">
+                  <label for="custPhone">Mobile Number <span class="req">*</span></label>
+                  <input type="tel" id="custPhone" class="form-control" required placeholder="e.g. 98201 55667">
+                </div>
+              </div>
+
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label for="custIdType">Identity Document <span class="req">*</span></label>
+                  <select id="custIdType" class="form-control">
+                    <option value="Aadhaar Card">Aadhaar Card</option>
+                    <option value="Driving License">Driving License</option>
+                    <option value="PAN Card">PAN Card</option>
+                    <option value="Voter ID">Voter ID</option>
+                    <option value="Passport">Passport</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="custIdNumber">ID Number / UID <span class="req">*</span></label>
+                  <input type="text" id="custIdNumber" class="form-control" required placeholder="e.g. 4589 1234 9876">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="custAddress">Full Residential Address <span class="req">*</span></label>
+                <textarea id="custAddress" class="form-control" rows="2" required placeholder="Flat/House No, Street, Landmark, Area"></textarea>
+              </div>
+
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label for="custCity">City / Town <span class="req">*</span></label>
+                  <input type="text" id="custCity" class="form-control" required value="Mumbai">
+                </div>
+                <div class="form-group">
+                  <label for="custPin">Pincode</label>
+                  <input type="text" id="custPin" class="form-control" placeholder="400050">
+                </div>
+              </div>
+
+              <h4 class="subhead-title">Delivery & RTO Commitment</h4>
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label for="deliveryDate">Delivery Date</label>
+                  <input type="date" id="deliveryDate" class="form-control">
+                </div>
+                <div class="form-group">
+                  <label for="warrantyOffer">Warranty Inclusions</label>
+                  <select id="warrantyOffer" class="form-control">
+                    <option value="3 Months Engine & Gearbox Warranty + 1 Free Service">3 Months Engine & Gearbox + 1 Free Service</option>
+                    <option value="6 Months Certified Comprehensive Warranty">6 Months Certified Comprehensive Warranty</option>
+                    <option value="As Is Condition (Standard Inspection Pass)">As Is Condition (Standard Inspection Pass)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Column 3: Payment Breakdown & Generate -->
+            <div class="form-card highlight-card">
+              <h3 class="form-card-title">
+                <span class="step-badge">3</span>
+                Payment & Invoice Settlement
+              </h3>
+
+              <div class="bill-summary-table">
+                <div class="bst-row">
+                  <span>Net Vehicle Price:</span>
+                  <span id="sumNetVehicle">₹0</span>
+                </div>
+                <div class="bst-row">
+                  <span>RTO + Accessories + Warranty:</span>
+                  <span id="sumAddons">₹0</span>
+                </div>
+                <div class="bst-row bst-total">
+                  <span>Grand Total Amount:</span>
+                  <span id="sumGrandTotal">₹0</span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="billPaymentMode">Payment Method <span class="req">*</span></label>
+                <select id="billPaymentMode" class="form-control" onchange="toggleLoanSection(this.value)">
+                  <option value="UPI / Online Transfer">UPI (GPay / PhonePe / Paytm)</option>
+                  <option value="Cash">Cash Payment</option>
+                  <option value="Bank NEFT / RTGS">Bank NEFT / RTGS</option>
+                  <option value="Two-Wheeler Loan / Finance">Two-Wheeler Loan / Finance (EMI)</option>
+                  <option value="Split (Cash + UPI)">Split (Cash + UPI)</option>
+                </select>
+              </div>
+
+              <!-- Conditional Loan Section with Mini EMI -->
+              <div id="loanFieldsBox" class="loan-details-box" style="display:none;">
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label for="loanBank">Financier / Bank Name</label>
+                    <input type="text" id="loanBank" class="form-control" placeholder="Bajaj Finserv / HDFC / IDFC">
+                  </div>
+                  <div class="form-group">
+                    <label for="loanAmount">Loan Sanctioned (₹)</label>
+                    <input type="number" id="loanAmount" class="form-control" placeholder="100000" oninput="calculateBillingTotals()">
+                  </div>
+                </div>
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label for="loanTenure">Tenure (Months)</label>
+                    <select id="loanTenure" class="form-control">
+                      <option value="12">12 Months (1 Year)</option>
+                      <option value="24" selected>24 Months (2 Years)</option>
+                      <option value="36">36 Months (3 Years)</option>
+                      <option value="48">48 Months (4 Years)</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Approx Monthly EMI</label>
+                    <div class="mini-emi-val" id="miniEmiDisplay">₹0 / mo</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label for="billAmountPaid">Amount Received Now (₹) <span class="req">*</span></label>
+                  <input type="number" id="billAmountPaid" class="form-control" required min="0" placeholder="175000" oninput="calculateBillingTotals()">
+                </div>
+                <div class="form-group">
+                  <label for="billBalancePending">Balance Due (₹)</label>
+                  <input type="number" id="billBalancePending" class="form-control readonly-input" readonly value="0">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="billPaymentNotes">Payment Ref / Txn ID / Cheque No</label>
+                <input type="text" id="billPaymentNotes" class="form-control" placeholder="e.g. UPI Ref: 309823901928 or Cash receipt">
+              </div>
+
+              <div class="billing-submit-area">
+                <button type="submit" class="btn btn-primary btn-block btn-lg">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                  </svg>
+                  Generate & Print Official Invoice
+                </button>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- TAB 4: SOLD BIKES & SALES HISTORY              -->
+        <!-- ============================================== -->
+        <section id="tab-sold" class="tab-panel">
+          <div class="section-header">
+            <div>
+              <h1 class="page-title">Sold Bikes & Customer Deliveries</h1>
+              <p class="page-desc">Complete archive of closed sales, realized profit margins, pending balance collector & RTO transfer tracking.</p>
+            </div>
+            <div class="header-tools">
+              <button class="btn btn-outline" onclick="exportSoldToCSV()">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="7 10 12 15 17 10"/>
+                  <line x1="12" y1="15" x2="12" y2="3"/>
+                </svg>
+                Export CSV
+              </button>
+            </div>
+          </div>
+
+          <!-- Sold Financial Summary Bar -->
+          <div class="sold-summary-bar">
+            <div class="ssb-item">
+              <span class="ssb-lbl">Total Deliveries</span>
+              <span class="ssb-val" id="soldTotalCount">0 Units</span>
+            </div>
+            <div class="ssb-item">
+              <span class="ssb-lbl">Gross Sales Revenue</span>
+              <span class="ssb-val" id="soldTotalRevenue">₹0</span>
+            </div>
+            <div class="ssb-item">
+              <span class="ssb-lbl">Procurement Cost</span>
+              <span class="ssb-val" id="soldTotalCost">₹0</span>
+            </div>
+            <div class="ssb-item highlight-green">
+              <span class="ssb-lbl">Showroom Net Profit</span>
+              <span class="ssb-val" id="soldNetProfit">₹0</span>
+            </div>
+          </div>
+
+          <!-- Filter / Search for Sold Units -->
+          <div class="filter-toolbar">
+            <div class="search-box">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input type="text" id="soldSearchInput" placeholder="Search by Invoice No, Customer Name, Mobile, Reg No...">
+            </div>
+
+            <div class="filter-group">
+              <select id="filterRtoStatus" class="select-control" onchange="renderSoldTable()">
+                <option value="ALL">All RTO Paper Statuses</option>
+                <option value="Documents Submitted">Documents Submitted to RTO</option>
+                <option value="NOC Applied">NOC Applied</option>
+                <option value="RC Transferred">RC Transferred & Dispatched</option>
+                <option value="Completed / Handover Done">Completed / Handover Done</option>
+                <option value="Pending with Buyer">Pending with Buyer</option>
+              </select>
+
+              <select id="filterPaymentBalance" class="select-control" onchange="renderSoldTable()">
+                <option value="ALL">All Payment Statuses</option>
+                <option value="PAID">Paid in Full</option>
+                <option value="PENDING">Has Pending Balance</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Sold Records Table -->
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Invoice No & Date</th>
+                  <th>Vehicle Details</th>
+                  <th>Buyer Information</th>
+                  <th>Sale Amount</th>
+                  <th>Showroom Cost</th>
+                  <th>Realized Profit</th>
+                  <th>Payment Status</th>
+                  <th>RTO Transfer Milestone</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="soldTableBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+
+          <div id="soldEmptyState" class="empty-state" style="display:none;">
+            <div class="empty-icon">🧾</div>
+            <h3>No Sales Records Found</h3>
+            <p>Completed transactions will be archived here with automated profit reports, balance collector and invoice reprints.</p>
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- TAB 5: CUSTOMER LEADS CRM & TEST DRIVES        -->
+        <!-- ============================================== -->
+        <section id="tab-leads" class="tab-panel">
+          <div class="section-header">
+            <div>
+              <h1 class="page-title">Customer Inquiries & Test Rides CRM</h1>
+              <p class="page-desc">Track interested buyers, schedule test rides, manage follow-ups & convert hot prospects into closed sales.</p>
+            </div>
+            <div class="header-tools">
+              <button class="btn btn-primary" onclick="showAddLeadModal()">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="5" x2="12" y2="19"/>
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                </svg>
+                + Add Customer Inquiry
+              </button>
+            </div>
+          </div>
+
+          <!-- Leads Filter Toolbar -->
+          <div class="filter-toolbar">
+            <div class="search-box">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input type="text" id="leadSearchInput" placeholder="Search by Customer Name, Phone, Desired Bike...">
+            </div>
+
+            <div class="filter-group">
+              <select id="filterLeadStatus" class="select-control" onchange="renderLeadsView()">
+                <option value="ALL">All Inquiry Statuses</option>
+                <option value="Hot Prospect">🔥 Hot Prospect</option>
+                <option value="Test Ride Scheduled">🏍️ Test Ride Scheduled</option>
+                <option value="Follow-up Needed">📞 Follow-up Needed</option>
+                <option value="Converted to Sale">✅ Converted to Sale</option>
+                <option value="Closed / Lost">❌ Closed / Lost</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Leads Cards Grid -->
+          <div class="leads-grid" id="leadsContainer">
+            <!-- Dynamically populated -->
+          </div>
+
+          <div id="leadsEmptyState" class="empty-state" style="display:none;">
+            <div class="empty-icon">👥</div>
+            <h3>No Customer Inquiries Yet</h3>
+            <p>Log walk-in customers or phone calls to schedule test rides and follow up effectively.</p>
+            <button class="btn btn-primary" onclick="showAddLeadModal()">+ Add First Inquiry</button>
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- TAB 6: EMI & FINANCE CALCULATOR                -->
+        <!-- ============================================== -->
+        <section id="tab-calculator" class="tab-panel">
+          <div class="section-header">
+            <div>
+              <h1 class="page-title">Showroom EMI & Two-Wheeler Loan Desk</h1>
+              <p class="page-desc">Instant loan calculations for walk-in customers with custom down payment, interest rates & amortization breakdown.</p>
+            </div>
+          </div>
+
+          <div class="emi-calc-grid">
+            <div class="form-card">
+              <h3 class="form-card-title">Loan Parameters</h3>
+
+              <div class="form-group">
+                <label for="emiBikeSelect">Select Bike (Optional: Auto-fills Price)</label>
+                <select id="emiBikeSelect" class="form-control" onchange="onEmiBikeSelected(this.value)">
+                  <option value="">-- Choose Stock Bike or Enter Custom Amount --</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="emiVehiclePrice">Vehicle On-Road / Agreed Price (₹)</label>
+                <input type="number" id="emiVehiclePrice" class="form-control" value="160000" min="10000" oninput="calculateStandaloneEmi()">
+              </div>
+
+              <div class="form-group">
+                <div class="slider-label-row">
+                  <label for="emiDownPayment">Down Payment: <strong id="emiDownPaymentDisplay">₹30,000</strong></label>
+                  <span class="sub-pct" id="emiDownPaymentPct">(18.7%)</span>
+                </div>
+                <input type="range" id="emiDownPaymentSlider" class="form-range" min="0" max="160000" step="5000" value="30000" oninput="onEmiSliderChange('downPayment', this.value)">
+              </div>
+
+              <div class="form-row-2">
+                <div class="form-group">
+                  <label for="emiInterestRate">Annual Interest Rate (%)</label>
+                  <input type="number" id="emiInterestRate" class="form-control" value="11.5" step="0.25" min="5" max="25" oninput="calculateStandaloneEmi()">
+                </div>
+                <div class="form-group">
+                  <label for="emiTenure">Loan Tenure</label>
+                  <select id="emiTenureSelect" class="form-control" onchange="calculateStandaloneEmi()">
+                    <option value="12">12 Months (1 Year)</option>
+                    <option value="24" selected>24 Months (2 Years)</option>
+                    <option value="36">36 Months (3 Years)</option>
+                    <option value="48">48 Months (4 Years)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="mt-3">
+                <button class="btn btn-primary btn-block" onclick="applyEmiToBilling()">
+                  Apply Quote to New Billing
+                </button>
+              </div>
+            </div>
+
+            <!-- Right: Result Card -->
+            <div class="form-card highlight-card">
+              <h3 class="form-card-title">Financing Summary Quote</h3>
+
+              <div class="emi-hero-result">
+                <span class="ehr-sub">Estimated Monthly EMI</span>
+                <div class="ehr-val" id="standaloneEmiVal">₹6,095 / mo</div>
+                <span class="badge-tag green" id="standaloneEmiTenureBadge">24 Months</span>
+              </div>
+
+              <div class="bill-summary-table mt-4">
+                <div class="bst-row">
+                  <span>Vehicle Price:</span>
+                  <span id="ehrPrice">₹1,60,000</span>
+                </div>
+                <div class="bst-row">
+                  <span>Down Payment (Customer Cash):</span>
+                  <span id="ehrDownPayment">₹30,000</span>
+                </div>
+                <div class="bst-row">
+                  <span>Loan Amount Financed:</span>
+                  <strong id="ehrPrincipal">₹1,30,000</strong>
+                </div>
+                <div class="bst-row">
+                  <span>Total Interest Payable:</span>
+                  <span style="color: #f59e0b;" id="ehrInterest">₹16,280</span>
+                </div>
+                <div class="bst-row bst-total">
+                  <span>Total Repayment to Bank:</span>
+                  <span id="ehrTotalPayable">₹1,46,280</span>
+                </div>
+              </div>
+
+              <div class="loan-partners-box">
+                <div class="lpb-title">Showroom Approved Finance Partners</div>
+                <div class="lpb-logos">
+                  <span class="partner-tag">Bajaj Finserv</span>
+                  <span class="partner-tag">HDFC Bank</span>
+                  <span class="partner-tag">IDFC First Bank</span>
+                  <span class="partner-tag">TVS Credit</span>
+                  <span class="partner-tag">L&amp;T Finance</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- TAB 7: PROCUREMENT & PURCHASE VOUCHER          -->
+        <!-- ============================================== -->
+        <section id="tab-procure" class="tab-panel">
+          <div class="section-header">
+            <div>
+              <h1 class="page-title">Vehicle Purchase & Trade-in Voucher</h1>
+              <p class="page-desc">Generate official purchase agreements when buying bikes from sellers to protect your showroom from past traffic fines & challans.</p>
+            </div>
+            <div class="header-tools">
+              <button class="btn btn-primary" onclick="showPurchaseVoucherModal()">+ New Purchase Voucher</button>
+            </div>
+          </div>
+
+          <div class="glass-panel">
+            <div class="panel-header">
+              <div>
+                <h3 class="panel-title">Why Purchase Agreements are Crucial for Used Bike Showrooms</h3>
+                <p class="panel-subtitle">Legal protection and documentation standards</p>
+              </div>
+            </div>
+            <div class="legal-info-grid">
+              <div class="li-card">
+                <span class="li-icon">⚖️</span>
+                <h4>Traffic Fine / Challan Indemnity</h4>
+                <p>Protects the showroom from existing e-challans or unpaid violations incurred by the previous owner before trade-in handover.</p>
+              </div>
+              <div class="li-card">
+                <span class="li-icon">📜</span>
+                <h4>RTO Transfer Undertaking</h4>
+                <p>Seller signs an official declaration authorizing the showroom to transfer registration and process Form 29 &amp; 30.</p>
+              </div>
+              <div class="li-card">
+                <span class="li-icon">💰</span>
+                <h4>Proof of Showroom Payment</h4>
+                <p>Establishes legal procurement trail with bank/UPI transfer record and verified Aadhaar ID of the seller.</p>
+              </div>
+            </div>
+
+            <div class="procure-action-box mt-4">
+              <h4>Ready to buy a used bike from a walk-in seller or customer?</h4>
+              <p>Create an official Two-Wheeler Purchase Voucher with instant A4 printing and seller declaration.</p>
+              <button class="btn btn-primary btn-lg mt-2" onclick="showPurchaseVoucherModal()">
+                Create Seller Purchase Voucher
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================== -->
+        <!-- TAB 8: SHOWROOM SETTINGS & BACKUP              -->
+        <!-- ============================================== -->
+        <section id="tab-settings" class="tab-panel">
+          <div class="section-header">
+            <div>
+              <h1 class="page-title">Showroom Profile & Settings</h1>
+              <p class="page-desc">Configure your showroom letterhead details, GST number, bank account and data backups.</p>
+            </div>
+          </div>
+
+          <div class="settings-grid">
+            <!-- Left: Showroom Profile -->
+            <div class="form-card">
+              <h3 class="form-card-title">Showroom Letterhead Details</h3>
+              <form id="settingsForm" onsubmit="saveSettings(event)">
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label for="setBusinessName">Showroom Name <span class="req">*</span></label>
+                    <input type="text" id="setBusinessName" class="form-control" required value="BIKE DILADO">
+                  </div>
+                  <div class="form-group">
+                    <label for="setTagline">Tagline / Slogan</label>
+                    <input type="text" id="setTagline" class="form-control" value="Quality Certified Pre-Owned Two-Wheelers">
+                  </div>
+                </div>
+
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label for="setPhone">Phone / Mobile <span class="req">*</span></label>
+                    <input type="text" id="setPhone" class="form-control" required value="+91 98200 12345">
+                  </div>
+                  <div class="form-group">
+                    <label for="setEmail">Email Address</label>
+                    <input type="email" id="setEmail" class="form-control" value="sales@bikedilado.com">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="setAddress">Showroom Physical Address <span class="req">*</span></label>
+                  <textarea id="setAddress" class="form-control" rows="2" required>Plot 42, Link Road, Near Metro Pillar 114, Andheri West, Mumbai, Maharashtra - 400053</textarea>
+                </div>
+
+                <div class="form-row-2">
+                  <div class="form-group">
+                    <label for="setGstin">GSTIN / Business Reg No</label>
+                    <input type="text" id="setGstin" class="form-control" value="27AABCB1234F1Z8">
+                  </div>
+                  <div class="form-group">
+                    <label for="setInvoicePrefix">Invoice Number Prefix</label>
+                    <input type="text" id="setInvoicePrefix" class="form-control" value="BD-2026-">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="setInvoiceTerms">Invoice Disclaimer & Terms</label>
+                  <textarea id="setInvoiceTerms" class="form-control" rows="3">1. Vehicle sold in certified inspected condition with all valid papers. 2. RTO Ownership transfer will be initiated by showroom within 15 working days. 3. Warranty covers Engine & Gearbox for 90 days or 3,000 km, whichever comes first.</textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Save Showroom Profile</button>
+              </form>
+            </div>
+
+            <!-- Right: Database Management -->
+            <div class="form-card">
+              <h3 class="form-card-title">Database Storage & Backup</h3>
+              <p class="card-desc">All your inventory, billing, leads, and sales records are stored locally with instant browser persistence.</p>
+
+              <div class="backup-actions">
+                <div class="backup-box">
+                  <div class="bb-icon">💾</div>
+                  <div class="bb-text">
+                    <h4>Export Full Showroom Backup</h4>
+                    <p>Download a complete JSON file containing all bikes, active stock, invoices, job cards, and leads.</p>
+                  </div>
+                  <button class="btn btn-outline" onclick="exportDataBackup()">Download JSON</button>
+                </div>
+
+                <div class="backup-box">
+                  <div class="bb-icon">📂</div>
+                  <div class="bb-text">
+                    <h4>Restore / Import Backup</h4>
+                    <p>Restore your showroom records from a previously exported backup file.</p>
+                  </div>
+                  <label class="btn btn-outline file-input-label">
+                    Choose File
+                    <input type="file" id="importFileInput" accept=".json" onchange="importDataBackup(event)" style="display:none;">
+                  </label>
+                </div>
+
+                <div class="backup-box danger-box">
+                  <div class="bb-icon">⚠️</div>
+                  <div class="bb-text">
+                    <h4>Reset to Sample Demo Data</h4>
+                    <p>Reset inventory to preloaded bikes (Royal Enfield, Yamaha R15, KTM Duke, Activa) and test records.</p>
+                  </div>
+                  <button class="btn btn-danger-outline" onclick="resetToSampleData()">Reset Demo Data</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: ADD / EDIT BIKE TO STOCK                -->
+  <!-- ============================================== -->
+  <div id="modalAddBike" class="modal-backdrop">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <div class="modal-badge-icon">🏍️</div>
+          <div>
+            <h3 class="modal-title" id="modalBikeTitle">Add Used Bike to Showroom Stock</h3>
+            <p class="modal-subtitle">Enter technical specifications, purchase price, refurbishment cost & documents.</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('modalAddBike')">&times;</button>
+      </div>
+
+      <form id="bikeForm" onsubmit="handleSaveBike(event)">
+        <input type="hidden" id="bikeEditId" value="">
+
+        <div class="modal-body">
+          <div class="form-section-title">1. Vehicle Basic Details</div>
+          <div class="form-row-3">
+            <div class="form-group">
+              <label for="bikeBrand">Make / Brand <span class="req">*</span></label>
+              <select id="bikeBrand" class="form-control" required>
+                <option value="">Select Brand</option>
+                <option value="Royal Enfield">Royal Enfield</option>
+                <option value="Yamaha">Yamaha</option>
+                <option value="KTM">KTM</option>
+                <option value="Honda">Honda</option>
+                <option value="Bajaj">Bajaj</option>
+                <option value="TVS">TVS</option>
+                <option value="Hero">Hero</option>
+                <option value="Suzuki">Suzuki</option>
+                <option value="Kawasaki">Kawasaki</option>
+                <option value="Ather / EV">Ather / EV</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="bikeModel">Model & Variant <span class="req">*</span></label>
+              <input type="text" id="bikeModel" class="form-control" required placeholder="e.g. Classic 350 Reborn or R15 V4">
+            </div>
+
+            <div class="form-group">
+              <label for="bikeRegNo">Registration Number <span class="req">*</span></label>
+              <input type="text" id="bikeRegNo" class="form-control text-uppercase" required placeholder="e.g. MH02 EQ 8844">
+            </div>
+          </div>
+
+          <div class="form-row-4">
+            <div class="form-group">
+              <label for="bikeYear">Year of Mfg <span class="req">*</span></label>
+              <input type="number" id="bikeYear" class="form-control" required min="2000" max="2027" value="2022">
+            </div>
+
+            <div class="form-group">
+              <label for="bikeKms">Kilometers Driven <span class="req">*</span></label>
+              <input type="number" id="bikeKms" class="form-control" required min="0" placeholder="12450">
+            </div>
+
+            <div class="form-group">
+              <label for="bikeOwners">Ownership <span class="req">*</span></label>
+              <select id="bikeOwners" class="form-control" required>
+                <option value="1st Owner">1st Owner</option>
+                <option value="2nd Owner">2nd Owner</option>
+                <option value="3rd Owner">3rd Owner</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="bikeFuel">Fuel Type</label>
+              <select id="bikeFuel" class="form-control">
+                <option value="Petrol">Petrol</option>
+                <option value="Electric">Electric (EV)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row-4">
+            <div class="form-group">
+              <label for="bikeColor">Color</label>
+              <input type="text" id="bikeColor" class="form-control" placeholder="e.g. Matte Black / Racing Blue">
+            </div>
+
+            <div class="form-group">
+              <label for="bikeChassis">Chassis / VIN Number</label>
+              <input type="text" id="bikeChassis" class="form-control text-uppercase" placeholder="ME4J35... (Optional)">
+            </div>
+
+            <div class="form-group">
+              <label for="bikeEngine">Engine Number</label>
+              <input type="text" id="bikeEngine" class="form-control text-uppercase" placeholder="J350E... (Optional)">
+            </div>
+
+            <div class="form-group">
+              <label for="bikeInspectionScore">Inspection Grade</label>
+              <select id="bikeInspectionScore" class="form-control">
+                <option value="Grade A+ (9.5/10)">Grade A+ (9.5/10) - Pristine</option>
+                <option value="Grade A (8.5/10)" selected>Grade A (8.5/10) - Excellent</option>
+                <option value="Grade B (7.5/10)">Grade B (7.5/10) - Good</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-section-title">2. Financials & Showroom Costs</div>
+          <div class="form-row-3">
+            <div class="form-group">
+              <label for="bikePurchaseCost">Purchase / Trade-in Cost (₹) <span class="req">*</span></label>
+              <input type="number" id="bikePurchaseCost" class="form-control" required min="1000" placeholder="145000" oninput="updateModalCostSummary()">
+            </div>
+
+            <div class="form-group">
+              <label for="bikeRefurbCost">Refurbishment & Repair Cost (₹)</label>
+              <input type="number" id="bikeRefurbCost" class="form-control" min="0" value="0" placeholder="e.g. 4500" oninput="updateModalCostSummary()">
+              <small class="helper-text">Servicing, new tires, battery, detailing, etc.</small>
+            </div>
+
+            <div class="form-group">
+              <label for="bikeListingPrice">Target Listing Price (₹) <span class="req">*</span></label>
+              <input type="number" id="bikeListingPrice" class="form-control" required min="1000" placeholder="178000" oninput="updateModalCostSummary()">
+            </div>
+          </div>
+
+          <div class="cost-summary-pill" id="modalCostPreview">
+            Total Showroom Investment: <strong>₹0</strong> | Potential Margin: <strong>₹0 (0%)</strong>
+          </div>
+
+          <div class="form-section-title">3. Inventory Status & Bike Photograph</div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="bikeStatus">Current Inventory Status <span class="req">*</span></label>
+              <select id="bikeStatus" class="form-control" required>
+                <option value="In Stock">In Stock (Floor Ready)</option>
+                <option value="Under Servicing">Under Inspection / Servicing</option>
+                <option value="Booked">Booked (Token Received)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Select Preset Photo or Upload</label>
+              <select id="bikeImagePreset" class="form-control" onchange="onPresetImageSelected(this.value)">
+                <option value="assets/royal_enfield.jpg">Preset: Royal Enfield Cruiser</option>
+                <option value="assets/yamaha_r15.jpg">Preset: Yamaha R15 Sports Bike</option>
+                <option value="assets/ktm_duke.jpg">Preset: KTM Duke Streetfighter</option>
+                <option value="assets/activa_scooter.jpg">Preset: Urban Commuter Scooter</option>
+                <option value="CUSTOM">Upload Custom Photo / URL</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Custom Photo Inputs -->
+          <div id="customImageRow" class="form-row-2" style="display: none;">
+            <div class="form-group">
+              <label for="bikeImageUrl">Direct Image URL</label>
+              <input type="url" id="bikeImageUrl" class="form-control" placeholder="https://example.com/bike.jpg">
+            </div>
+            <div class="form-group">
+              <label for="bikeImageFile">Or Select Local Image File</label>
+              <input type="file" id="bikeImageFile" class="form-control" accept="image/*" onchange="handleImageFileUpload(event)">
+            </div>
+          </div>
+
+          <div class="form-section-title">4. Document Verification Checklist</div>
+          <div class="checklist-grid">
+            <label class="check-item">
+              <input type="checkbox" id="chkRc" checked>
+              <span>Original RC Book / Smart Card</span>
+            </label>
+            <label class="check-item">
+              <input type="checkbox" id="chkInsurance" checked>
+              <span>Valid Insurance Policy</span>
+            </label>
+            <label class="check-item">
+              <input type="checkbox" id="chkPuc" checked>
+              <span>Valid Pollution (PUC)</span>
+            </label>
+            <label class="check-item">
+              <input type="checkbox" id="chkForm2930" checked>
+              <span>Signed RTO Form 29 & 30</span>
+            </label>
+            <label class="check-item">
+              <input type="checkbox" id="chkKeys" checked>
+              <span>2 Original Keys</span>
+            </label>
+            <label class="check-item">
+              <input type="checkbox" id="chkNoc">
+              <span>RTO Bank NOC (If Hypothecated)</span>
+            </label>
+          </div>
+
+          <div class="form-group mt-3">
+            <label for="bikeNotes">Inspection / Refurbishment Notes</label>
+            <textarea id="bikeNotes" class="form-control" rows="2" placeholder="e.g. Fitted new MRF rear tire, engine oil flushed, minor scratch on left exhaust buffer"></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeModal('modalAddBike')">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btnSaveBike">Save to Inventory</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: PRINTABLE TAX / DELIVERY INVOICE        -->
+  <!-- ============================================== -->
+  <div id="modalInvoice" class="modal-backdrop">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-header no-print">
+        <div class="modal-title-wrap">
+          <div class="modal-badge-icon">🧾</div>
+          <div>
+            <h3 class="modal-title">Official Tax Invoice & Delivery Receipt</h3>
+            <p class="modal-subtitle">Ready to print or share with customer.</p>
+          </div>
+        </div>
+        <div class="modal-actions-right">
+          <button class="btn btn-outline" id="btnShareWhatsAppInv" title="Share invoice link on WhatsApp">
+            💬 Share WhatsApp
+          </button>
+          <button class="btn btn-accent" onclick="window.print()">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 6 2 18 2 18 9"/>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+              <rect x="6" y="14" width="12" height="8"/>
+            </svg>
+            Print Invoice (A4)
+          </button>
+          <button class="modal-close-btn" onclick="closeModal('modalInvoice')">&times;</button>
+        </div>
+      </div>
+
+      <!-- Printable Invoice Document Body -->
+      <div class="modal-body print-area" id="invoicePrintContent">
+        <!-- Invoice Header -->
+        <div class="inv-header">
+          <div class="inv-brand-left">
+            <div class="inv-logo-title" id="invShowroomName">BIKE DILADO</div>
+            <div class="inv-logo-tagline" id="invShowroomTagline">Certified Pre-Owned Two-Wheelers Showroom</div>
+            <div class="inv-address" id="invShowroomAddress">
+              Plot 42, Link Road, Near Metro Pillar 114, Andheri West, Mumbai, MH - 400053
+            </div>
+            <div class="inv-contacts">
+              <span><strong>Phone:</strong> <span id="invShowroomPhone">+91 98200 12345</span></span> | 
+              <span><strong>GSTIN:</strong> <span id="invShowroomGstin">27AABCB1234F1Z8</span></span>
+            </div>
+          </div>
+          <div class="inv-title-right">
+            <div class="inv-pill">TAX INVOICE & DELIVERY RECEIPT</div>
+            <table class="inv-meta-table">
+              <tr>
+                <td><strong>Invoice No:</strong></td>
+                <td><span id="invNumber">BD-2026-0101</span></td>
+              </tr>
+              <tr>
+                <td><strong>Date:</strong></td>
+                <td><span id="invDate">29-09-2026</span></td>
+              </tr>
+              <tr>
+                <td><strong>Payment Mode:</strong></td>
+                <td><span id="invPayMode">UPI / Online</span></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+
+        <hr class="inv-divider">
+
+        <!-- Buyer & Vehicle 2-Column Info -->
+        <div class="inv-parties">
+          <div class="inv-party-card">
+            <div class="ipc-title">BUYER / CUSTOMER DETAILS</div>
+            <div class="ipc-name" id="invCustName">Mr. Vikram Malhotra</div>
+            <div class="ipc-line"><strong>Mobile:</strong> <span id="invCustPhone">+91 98201 55667</span></div>
+            <div class="ipc-line"><strong>ID Proof:</strong> <span id="invCustIdProof">Aadhaar (4589 1234 9876)</span></div>
+            <div class="ipc-line"><strong>Address:</strong> <span id="invCustAddress">Flat 402, Sunshine Heights, Andheri, Mumbai</span></div>
+          </div>
+
+          <div class="inv-party-card">
+            <div class="ipc-title">VEHICLE PARTICULARS</div>
+            <div class="ipc-name" id="invBikeModel">Royal Enfield Classic 350 Reborn</div>
+            <div class="ipc-line"><strong>Registration No:</strong> <span class="highlight-reg" id="invRegNo">MH 02 EQ 8844</span></div>
+            <div class="ipc-line"><strong>Mfg Year / KM:</strong> <span id="invYearKm">2022 | 12,450 km</span></div>
+            <div class="ipc-line"><strong>Engine No:</strong> <span id="invEngineNo">J350E774892</span></div>
+            <div class="ipc-line"><strong>Chassis No:</strong> <span id="invChassisNo">ME4J35B9K812034</span></div>
+          </div>
+        </div>
+
+        <!-- Line Items Table -->
+        <table class="inv-items-table">
+          <thead>
+            <tr>
+              <th style="width: 50px;">#</th>
+              <th>Description of Goods / Services</th>
+              <th>HSN/SAC</th>
+              <th>Qty</th>
+              <th style="text-align: right;">Amount (INR)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>
+                <strong id="invTableBikeTitle">Used Motorcycle: Royal Enfield Classic 350</strong>
+                <div class="inv-item-sub" id="invTableRegInfo">Reg: MH 02 EQ 8844 | 1st Owner | Color: Matte Black</div>
+              </td>
+              <td>8711</td>
+              <td>1 Unit</td>
+              <td style="text-align: right;" id="invTableAgreedPrice">₹1,75,000.00</td>
+            </tr>
+            <tr id="invRowDiscount" style="display:none;">
+              <td>2</td>
+              <td>Showroom Festival / Special Discount</td>
+              <td>-</td>
+              <td>1</td>
+              <td style="text-align: right; color: #dc2626;" id="invTableDiscount">-₹0.00</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>RTO Ownership Transfer & Legal Documentation Charges</td>
+              <td>9987</td>
+              <td>1</td>
+              <td style="text-align: right;" id="invTableRto">₹1,500.00</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Safety Helmet & Showroom Care Kit</td>
+              <td>6506</td>
+              <td>1</td>
+              <td style="text-align: right;" id="invTableAcc">₹1,200.00</td>
+            </tr>
+            <tr id="invRowWarranty" style="display:none;">
+              <td>5</td>
+              <td>Extended Certified Showroom Warranty Package</td>
+              <td>9987</td>
+              <td>1</td>
+              <td style="text-align: right;" id="invTableWarranty">₹0.00</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="4" style="text-align: right;"><strong>Grand Total Payable:</strong></td>
+              <td style="text-align: right;"><strong id="invTableGrandTotal">₹1,77,700.00</strong></td>
+            </tr>
+            <tr>
+              <td colspan="4" style="text-align: right;">Amount Received / Paid:</td>
+              <td style="text-align: right; color: #16a34a;"><strong id="invTablePaid">₹1,77,700.00</strong></td>
+            </tr>
+            <tr id="invRowBalance">
+              <td colspan="4" style="text-align: right;">Balance Due:</td>
+              <td style="text-align: right; color: #ea580c;"><strong id="invTableBalance">₹0.00</strong></td>
+            </tr>
+          </tfoot>
+        </table>
+
+        <!-- Amount In Words -->
+        <div class="inv-words-box">
+          <strong>Amount In Words:</strong> <span id="invAmountInWords">One Lakh Seventy-Seven Thousand Seven Hundred Rupees Only</span>
+        </div>
+
+        <!-- Warranty & Undertaking -->
+        <div class="inv-terms-grid">
+          <div class="it-box">
+            <div class="it-title">WARRANTY & DELIVERY DECLARATION</div>
+            <p id="invWarrantyNote">Vehicle delivered in sound running condition along with Original RC, Insurance policy, Pollution certificate and 2 sets of keys. Showroom provides 3 Months Engine Warranty & 1 Free Service.</p>
+          </div>
+          <div class="it-box">
+            <div class="it-title">BUYER ACCEPTANCE & RTO UNDERTAKING</div>
+            <p>I have inspected the vehicle, test-driven it, and checked all engine/chassis numbers. I undertake full legal responsibility for any traffic or civil violation from the date and time of physical handover.</p>
+          </div>
+        </div>
+
+        <!-- Signatures -->
+        <div class="inv-sign-row">
+          <div class="sign-block">
+            <div class="sign-line"></div>
+            <p>Customer / Buyer's Signature</p>
+          </div>
+          <div class="sign-stamp">
+            <div class="showroom-seal">
+              <span>BIKE DILADO</span>
+              <small>AUTHORIZED SIGNATORY</small>
+            </div>
+          </div>
+          <div class="sign-block">
+            <div class="sign-line"></div>
+            <p>For BIKE DILADO (Manager / Authorized Signatory)</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer no-print">
+        <button class="btn btn-outline" onclick="printGatePass()">🎫 Print Gate Pass</button>
+        <button class="btn btn-outline" onclick="closeModal('modalInvoice')">Close</button>
+        <button class="btn btn-primary" onclick="window.print()">Print Receipt</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: SHOWROOM HANDLEBAR PRICE TAG (A4/CARD)   -->
+  <!-- ============================================== -->
+  <div id="modalPriceTag" class="modal-backdrop">
+    <div class="modal-dialog">
+      <div class="modal-header no-print">
+        <div class="modal-title-wrap">
+          <div class="modal-badge-icon">🏷️</div>
+          <div>
+            <h3 class="modal-title">Showroom Floor Handlebar Tag</h3>
+            <p class="modal-subtitle">Hang on the bike handlebar for walk-in showroom visitors.</p>
+          </div>
+        </div>
+        <div class="modal-actions-right">
+          <button class="btn btn-accent" onclick="window.print()">Print Tag</button>
+          <button class="modal-close-btn" onclick="closeModal('modalPriceTag')">&times;</button>
+        </div>
+      </div>
+
+      <div class="modal-body print-tag-body">
+        <div class="handlebar-tag-card" id="handlebarTagContent">
+          <div class="ht-header">
+            <div class="ht-brand-name">BIKE DILADO</div>
+            <div class="ht-cert-badge">CERTIFIED PRE-OWNED</div>
+          </div>
+          <div class="ht-model" id="htModel">Royal Enfield Classic 350</div>
+          <div class="ht-reg-box" id="htReg">MH 02 EQ 8844</div>
+
+          <div class="ht-specs-grid">
+            <div class="ht-spec-item">
+              <span class="ht-spec-lbl">MFG YEAR</span>
+              <strong id="htYear">2022</strong>
+            </div>
+            <div class="ht-spec-item">
+              <span class="ht-spec-lbl">ODOMETER</span>
+              <strong id="htKms">12,450 km</strong>
+            </div>
+            <div class="ht-spec-item">
+              <span class="ht-spec-lbl">OWNER</span>
+              <strong id="htOwner">1st Owner</strong>
+            </div>
+            <div class="ht-spec-item">
+              <span class="ht-spec-lbl">INSPECTION</span>
+              <strong style="color: #10b981;" id="htGrade">Grade A+ (9.5)</strong>
+            </div>
+          </div>
+
+          <div class="ht-price-box">
+            <span class="ht-price-lbl">SHOWROOM OFFER PRICE</span>
+            <div class="ht-price-val" id="htPrice">₹1,78,000</div>
+            <span class="ht-emi-sub" id="htEmi">Easy EMI starting @ ₹4,999/mo</span>
+          </div>
+
+          <div class="ht-features-list">
+            <span>✓ 50-Point Certified Inspection Pass</span>
+            <span>✓ 3-Months Engine &amp; Gearbox Warranty</span>
+            <span>✓ 100% Verified RC &amp; Non-Accidental Guarantee</span>
+          </div>
+
+          <div class="ht-footer">
+            <span>Call Showroom Desk: +91 98200 12345</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer no-print">
+        <button class="btn btn-outline" onclick="closeModal('modalPriceTag')">Close</button>
+        <button class="btn btn-primary" onclick="window.print()">Print Tag</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: DELIVERY GATE PASS                      -->
+  <!-- ============================================== -->
+  <div id="modalGatePass" class="modal-backdrop">
+    <div class="modal-dialog">
+      <div class="modal-header no-print">
+        <div class="modal-title-wrap">
+          <div class="modal-badge-icon">🎫</div>
+          <div>
+            <h3 class="modal-title">Vehicle Delivery Gate Pass</h3>
+            <p class="modal-subtitle">Official exit clearance voucher for showroom security.</p>
+          </div>
+        </div>
+        <div class="modal-actions-right">
+          <button class="btn btn-accent" onclick="window.print()">Print Gate Pass</button>
+          <button class="modal-close-btn" onclick="closeModal('modalGatePass')">&times;</button>
+        </div>
+      </div>
+
+      <div class="modal-body print-gatepass-body">
+        <div class="gatepass-card" id="gatePassContent">
+          <div class="gp-header">
+            <div>
+              <h3>BIKE DILADO - SECURITY GATE PASS</h3>
+              <p>Vehicle Exit & Handover Authorization Slip</p>
+            </div>
+            <div class="gp-badge">DELIVERY OK</div>
+          </div>
+
+          <div class="gp-meta-table">
+            <div class="gp-row"><span>Pass Number:</span><strong id="gpPassNo">GP-2026-081</strong></div>
+            <div class="gp-row"><span>Date &amp; Time:</span><strong id="gpDateTime">29-09-2026 05:30 PM</strong></div>
+            <div class="gp-row"><span>Invoice Number:</span><strong id="gpInvNo">BD-2026-0101</strong></div>
+          </div>
+
+          <div class="gp-vehicle-box">
+            <div class="gp-box-title">VEHICLE DETAILS</div>
+            <p><strong id="gpBike">Royal Enfield Classic 350</strong></p>
+            <p>Registration No: <span class="highlight-reg" id="gpReg">MH 02 EQ 8844</span></p>
+            <p>Engine No: <span id="gpEngine">J350E774892</span> | Chassis: <span id="gpChassis">ME4J35B9K812034</span></p>
+          </div>
+
+          <div class="gp-buyer-box">
+            <div class="gp-box-title">DELIVERED TO</div>
+            <p><strong id="gpBuyer">Mr. Vikram Malhotra</strong> (Ph: <span id="gpPhone">98201 55667</span>)</p>
+            <p>Payment Clearance Status: <strong style="color: #16a34a;" id="gpPaymentStatus">PAID IN FULL (CLEARED)</strong></p>
+          </div>
+
+          <div class="gp-sign-row">
+            <div class="gp-sign-col">
+              <div class="sign-line"></div>
+              <p>Customer Signature</p>
+            </div>
+            <div class="gp-sign-col">
+              <div class="sign-line"></div>
+              <p>Showroom Manager</p>
+            </div>
+            <div class="gp-sign-col">
+              <div class="sign-line"></div>
+              <p>Security Check Officer</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer no-print">
+        <button class="btn btn-outline" onclick="closeModal('modalGatePass')">Close</button>
+        <button class="btn btn-primary" onclick="window.print()">Print Gate Pass</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: ADD / EDIT CUSTOMER LEAD (CRM)          -->
+  <!-- ============================================== -->
+  <div id="modalLead" class="modal-backdrop">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <div class="modal-badge-icon">👥</div>
+          <div>
+            <h3 class="modal-title" id="leadModalTitle">New Customer Inquiry / Test Ride</h3>
+            <p class="modal-subtitle">Record prospective buyer details & follow-up schedule.</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('modalLead')">&times;</button>
+      </div>
+
+      <form id="leadForm" onsubmit="handleSaveLead(event)">
+        <input type="hidden" id="leadEditId" value="">
+
+        <div class="modal-body">
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="leadName">Customer Name <span class="req">*</span></label>
+              <input type="text" id="leadName" class="form-control" required placeholder="e.g. Sahil Khan">
+            </div>
+            <div class="form-group">
+              <label for="leadPhone">Phone Number <span class="req">*</span></label>
+              <input type="tel" id="leadPhone" class="form-control" required placeholder="e.g. 98190 22334">
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="leadInterestedBike">Interested Bike / Model</label>
+              <select id="leadInterestedBike" class="form-control">
+                <!-- Dynamically populated from stock -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="leadBudget">Customer Budget (₹)</label>
+              <input type="number" id="leadBudget" class="form-control" placeholder="e.g. 150000">
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="leadStatus">Inquiry Status</label>
+              <select id="leadStatus" class="form-control">
+                <option value="Hot Prospect">🔥 Hot Prospect (Ready to buy)</option>
+                <option value="Test Ride Scheduled">🏍️ Test Ride Scheduled</option>
+                <option value="Follow-up Needed">📞 Follow-up Needed</option>
+                <option value="Converted to Sale">✅ Converted to Sale</option>
+                <option value="Closed / Lost">❌ Closed / Lost</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="leadTestRideDate">Test Ride / Follow-up Date</label>
+              <input type="date" id="leadTestRideDate" class="form-control">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="leadNotes">Customer Requirements & Conversation Notes</label>
+            <textarea id="leadNotes" class="form-control" rows="3" placeholder="e.g. Needs financing with ₹25k down payment, prefers black color, test ride scheduled for Sunday 11 AM."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeModal('modalLead')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Customer Lead</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: COLLECT PENDING BALANCE                 -->
+  <!-- ============================================== -->
+  <div id="modalCollectBalance" class="modal-backdrop">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <div class="modal-badge-icon">💰</div>
+          <div>
+            <h3 class="modal-title">Collect Outstanding Balance</h3>
+            <p class="modal-subtitle">Record customer installment payment & update invoice.</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('modalCollectBalance')">&times;</button>
+      </div>
+
+      <form id="collectBalanceForm" onsubmit="handleSaveBalanceCollection(event)">
+        <input type="hidden" id="cbInvoiceNo" value="">
+
+        <div class="modal-body">
+          <div class="balance-summary-box">
+            <div class="bsb-row"><span>Customer:</span><strong id="cbCustName">Vikram Malhotra</strong></div>
+            <div class="bsb-row"><span>Invoice:</span><strong id="cbInvNo">BD-2026-0089</strong></div>
+            <div class="bsb-row"><span>Current Outstanding Balance:</span><strong style="color: #ef4444; font-size: 16px;" id="cbBalanceDue">₹15,000</strong></div>
+          </div>
+
+          <div class="form-row-2 mt-3">
+            <div class="form-group">
+              <label for="cbAmountPaying">Amount Collecting Now (₹) <span class="req">*</span></label>
+              <input type="number" id="cbAmountPaying" class="form-control" required min="100">
+            </div>
+            <div class="form-group">
+              <label for="cbPaymentMode">Payment Mode</label>
+              <select id="cbPaymentMode" class="form-control">
+                <option value="UPI / Online">UPI (GPay / PhonePe)</option>
+                <option value="Cash">Cash Receipt</option>
+                <option value="Bank NEFT">Bank Transfer</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="cbRefNotes">Transaction ID / Receipt Note</label>
+            <input type="text" id="cbRefNotes" class="form-control" placeholder="e.g. UPI Ref 4091829012 or Cash Voucher #102">
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeModal('modalCollectBalance')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Record Payment & Settle</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: SELLER PURCHASE VOUCHER                 -->
+  <!-- ============================================== -->
+  <div id="modalPurchaseVoucher" class="modal-backdrop">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-header no-print">
+        <div class="modal-title-wrap">
+          <div class="modal-badge-icon">📝</div>
+          <div>
+            <h3 class="modal-title">Vehicle Purchase & Trade-In Voucher</h3>
+            <p class="modal-subtitle">Official agreement between Seller & BIKE DILADO.</p>
+          </div>
+        </div>
+        <div class="modal-actions-right">
+          <button class="btn btn-accent" onclick="window.print()">Print Agreement</button>
+          <button class="modal-close-btn" onclick="closeModal('modalPurchaseVoucher')">&times;</button>
+        </div>
+      </div>
+
+      <div class="modal-body print-area" id="purchaseVoucherPrint">
+        <div class="inv-header">
+          <div class="inv-brand-left">
+            <div class="inv-logo-title">BIKE DILADO</div>
+            <div class="inv-logo-tagline">TWO-WHEELER PROCUREMENT & PURCHASE VOUCHER</div>
+            <div class="inv-address">Plot 42, Link Road, Andheri West, Mumbai, MH - 400053</div>
+          </div>
+          <div class="inv-title-right">
+            <div class="inv-pill">SELLER PURCHASE AGREEMENT</div>
+            <div><strong>Date:</strong> <span id="pvDate">29-09-2026</span></div>
+          </div>
+        </div>
+
+        <hr class="inv-divider">
+
+        <div class="pv-content">
+          <p>This Purchase Voucher records the complete sale, physical handover, and transfer of rights of the following two-wheeler from the Seller to <strong>BIKE DILADO</strong>.</p>
+
+          <div class="inv-parties mt-3">
+            <div class="inv-party-card">
+              <div class="ipc-title">SELLER PARTICULARS</div>
+              <div class="form-group mb-1">
+                <input type="text" id="pvSellerName" class="form-control" placeholder="Seller Full Name" value="Mr. Ramesh Patel">
+              </div>
+              <div class="form-group mb-1">
+                <input type="text" id="pvSellerPhone" class="form-control" placeholder="Mobile Number" value="+91 98920 11223">
+              </div>
+              <div class="form-group mb-1">
+                <input type="text" id="pvSellerId" class="form-control" placeholder="Aadhaar / DL Number" value="Aadhaar: 7788 9900 1122">
+              </div>
+            </div>
+
+            <div class="inv-party-card">
+              <div class="ipc-title">VEHICLE DETAILS</div>
+              <div class="form-group mb-1">
+                <input type="text" id="pvBikeModel" class="form-control" placeholder="Make & Model" value="Royal Enfield Classic 350">
+              </div>
+              <div class="form-group mb-1">
+                <input type="text" id="pvRegNo" class="form-control text-uppercase" placeholder="Reg Number" value="MH 02 EQ 8844">
+              </div>
+              <div class="form-group mb-1">
+                <input type="number" id="pvAgreedPrice" class="form-control" placeholder="Purchase Price (₹)" value="145000">
+              </div>
+            </div>
+          </div>
+
+          <div class="pv-declaration-box mt-3">
+            <h4>SELLER'S STATUTORY DECLARATION & TRAFFIC INDEMNITY</h4>
+            <p>1. I, the Seller, hereby confirm that I am the sole legal owner of the vehicle and it is free from all encumbrances, theft reports, or hypothecation disputes.</p>
+            <p>2. I declare that all traffic violations, pending e-challans, and legal responsibilities prior to this date are my sole liability.</p>
+            <p>3. I have received the full agreed amount from BIKE DILADO and have signed RTO Form 29 &amp; 30 for transfer of ownership.</p>
+          </div>
+
+          <div class="inv-sign-row mt-4">
+            <div class="sign-block">
+              <div class="sign-line"></div>
+              <p>Seller's Signature &amp; Thumb Impression</p>
+            </div>
+            <div class="sign-block">
+              <div class="sign-line"></div>
+              <p>Authorized Showroom Buyer (BIKE DILADO)</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer no-print">
+        <button class="btn btn-outline" onclick="closeModal('modalPurchaseVoucher')">Close</button>
+        <button class="btn btn-primary" onclick="window.print()">Print Agreement</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Toast -->
+  <div id="toastNotification" class="toast-popup">
+    <div class="toast-icon" id="toastIcon">✓</div>
+    <div class="toast-msg" id="toastMsg">Operation successful</div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
