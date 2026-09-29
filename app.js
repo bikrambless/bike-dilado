@@ -182,6 +182,154 @@ const INITIAL_SALES = [
   }
 ];
 
+// Historical Demo & Archive Sales for Past Years (e.g. 2025)
+const SAMPLE_2025_SALES = [
+  {
+    invoiceNo: "BD-2025-0042",
+    saleDate: "2025-04-18",
+    bikeId: "sold-bike-2025-1",
+    brand: "KTM",
+    model: "Duke 250 ABS (Gen 2)",
+    regNo: "MH 01 DK 4110",
+    year: 2021,
+    kms: 14200,
+    purchaseCost: 135000,
+    refurbCost: 3500,
+    totalCost: 138500,
+    agreedPrice: 158000,
+    discount: 2000,
+    rtoFee: 1500,
+    accessories: 1000,
+    warranty: 1000,
+    grandTotal: 159500,
+    amountPaid: 159500,
+    balance: 0,
+    profit: 19500,
+    paymentMode: "Bank Transfer / NEFT",
+    paymentRef: "HDFC-N99182301",
+    customer: {
+      name: "Vikram Singhania",
+      phone: "+91 98202 33119",
+      address: "Flat 402, Sea Green Apts, Worli Sea Face, Mumbai",
+      city: "Mumbai",
+      idType: "Aadhaar Card",
+      idNumber: "4421 8899 0012"
+    },
+    rtoStatus: "Completed / Handover Done",
+    warrantyTerms: "6 Months Certified Showroom Warranty on Engine & Transmission",
+    chassis: "VBK402507M882190",
+    engine: "KTM250EU51928"
+  },
+  {
+    invoiceNo: "BD-2025-0067",
+    saleDate: "2025-08-11",
+    bikeId: "sold-bike-2025-2",
+    brand: "Royal Enfield",
+    model: "Meteor 350 Stellar Black",
+    regNo: "MH 03 DX 7720",
+    year: 2022,
+    kms: 11000,
+    purchaseCost: 150000,
+    refurbCost: 2000,
+    totalCost: 152000,
+    agreedPrice: 172000,
+    discount: 1000,
+    rtoFee: 1500,
+    accessories: 1500,
+    warranty: 0,
+    grandTotal: 174000,
+    amountPaid: 174000,
+    balance: 0,
+    profit: 20000,
+    paymentMode: "UPI / QR Code",
+    paymentRef: "UPI-5520199281",
+    customer: {
+      name: "Deepak Chawla",
+      phone: "+91 97690 12845",
+      address: "12/A, Highland Park, Mulund West, Mumbai",
+      city: "Mumbai",
+      idType: "Driving License",
+      idNumber: "MH03-2016008129"
+    },
+    rtoStatus: "RC Transferred",
+    warrantyTerms: "3 Months Showroom Powertrain Guarantee",
+    chassis: "ME4J35B7N110944",
+    engine: "J350E449102"
+  },
+  {
+    invoiceNo: "BD-2025-0091",
+    saleDate: "2025-11-05",
+    bikeId: "sold-bike-2025-3",
+    brand: "Honda",
+    model: "Activa 125 Disc BS6",
+    regNo: "MH 47 AM 5519",
+    year: 2021,
+    kms: 15400,
+    purchaseCost: 46000,
+    refurbCost: 2200,
+    totalCost: 48200,
+    agreedPrice: 62000,
+    discount: 1000,
+    rtoFee: 1500,
+    accessories: 800,
+    warranty: 0,
+    grandTotal: 63300,
+    amountPaid: 63300,
+    balance: 0,
+    profit: 13800,
+    paymentMode: "Cash",
+    paymentRef: "CASH-REC-2025-091",
+    customer: {
+      name: "Sunita Deshmukh",
+      phone: "+91 98191 77665",
+      address: "Plot 78, Sector 19, Borivali West, Mumbai",
+      city: "Mumbai",
+      idType: "Aadhaar Card",
+      idNumber: "3311 7744 9920"
+    },
+    rtoStatus: "RC Transferred",
+    warrantyTerms: "3 Months Engine Warranty",
+    chassis: "ME4JF5012L819201",
+    engine: "JF50E901824"
+  },
+  {
+    invoiceNo: "BD-2025-0115",
+    saleDate: "2025-12-28",
+    bikeId: "sold-bike-2025-4",
+    brand: "Yamaha",
+    model: "MT-15 V2 Metallic Black",
+    regNo: "MH 02 FP 9012",
+    year: 2022,
+    kms: 13100,
+    purchaseCost: 118000,
+    refurbCost: 2500,
+    totalCost: 120500,
+    agreedPrice: 142000,
+    discount: 1500,
+    rtoFee: 1500,
+    accessories: 1000,
+    warranty: 1000,
+    grandTotal: 144000,
+    amountPaid: 130000,
+    balance: 14000,
+    profit: 21500,
+    paymentMode: "Split (Cash + UPI)",
+    paymentRef: "CASH+UPI-901823",
+    customer: {
+      name: "Karan Johar Patel",
+      phone: "+91 99200 88123",
+      address: "B-501, Raheja Heights, Malad East, Mumbai",
+      city: "Mumbai",
+      idType: "PAN Card",
+      idNumber: "ABCDE1234F"
+    },
+    rtoStatus: "RC Transferred",
+    warrantyTerms: "3 Months Comprehensive Coverage",
+    chassis: "ME1RG5820N771920",
+    engine: "G3J4E882104"
+  }
+];
+
 const INITIAL_LEADS = [
   {
     id: "lead-1",
@@ -232,6 +380,15 @@ let appState = {
 };
 
 let currentViewingSale = null;
+let currentViewingArchiveSale = null;
+
+// Archive Explorer State
+let activeArchiveData = {
+  sourceName: "",
+  sales: [],
+  period: "",
+  isExternal: false
+};
 
 // Initialize Application
 document.addEventListener("DOMContentLoaded", () => {
@@ -434,6 +591,7 @@ function renderAllViews() {
   renderSoldTable();
   renderLeadsView();
   loadSettingsForm();
+  updateYearlyBackupStats();
 }
 
 function updateNavCounters() {
@@ -1781,10 +1939,15 @@ function renderSoldTable() {
   tbody.innerHTML = "";
 
   const query = (document.getElementById("soldSearchInput").value || "").toLowerCase().trim();
+  const yearFilter = document.getElementById("filterSoldYear")?.value || "ALL";
   const rtoFilter = document.getElementById("filterRtoStatus").value;
   const balanceFilter = document.getElementById("filterPaymentBalance")?.value || "ALL";
 
   let list = [...appState.sales];
+
+  if (yearFilter !== "ALL") {
+    list = list.filter(s => (s.saleDate || "").startsWith(yearFilter));
+  }
 
   if (rtoFilter !== "ALL") {
     list = list.filter(s => s.rtoStatus === rtoFilter);
@@ -1807,11 +1970,12 @@ function renderSoldTable() {
     });
   }
 
-  // Update summary bar
-  const totalCount = appState.sales.length;
-  const totalRev = appState.sales.reduce((acc, s) => acc + (s.grandTotal || 0), 0);
-  const totalCost = appState.sales.reduce((acc, s) => acc + (s.totalCost || 0), 0);
-  const totalProfit = appState.sales.reduce((acc, s) => acc + (s.profit || 0), 0);
+  // Update summary bar based on selected year (or all if ALL)
+  const summarySales = yearFilter === "ALL" ? appState.sales : appState.sales.filter(s => (s.saleDate || "").startsWith(yearFilter));
+  const totalCount = summarySales.length;
+  const totalRev = summarySales.reduce((acc, s) => acc + (s.grandTotal || 0), 0);
+  const totalCost = summarySales.reduce((acc, s) => acc + (s.totalCost || 0), 0);
+  const totalProfit = summarySales.reduce((acc, s) => acc + (s.profit || 0), 0);
 
   document.getElementById("soldTotalCount").textContent = `${totalCount} Units`;
   document.getElementById("soldTotalRevenue").textContent = formatINR(totalRev);
@@ -1873,6 +2037,9 @@ function renderSoldTable() {
       </td>
       <td>
         <div style="display:flex; gap: 4px;">
+          <button class="btn btn-primary btn-xs" onclick="openOldSaleDetail('${sale.invoiceNo}')" title="Inspect Full Sale Record Dossier">
+            👁️ Details
+          </button>
           <button class="btn btn-outline btn-xs" onclick="reprintInvoice('${sale.invoiceNo}')" title="Reprint Official Invoice">
             🧾 Bill
           </button>
@@ -2132,6 +2299,9 @@ function setupEventListeners() {
       closeModal("modalLead");
       closeModal("modalCollectBalance");
       closeModal("modalPurchaseVoucher");
+      closeModal("modalArchiveViewer");
+      closeModal("modalOldSaleDetail");
+      closeModal("modalYearlyAudit");
     }
 
     // Ctrl+K to jump to search
@@ -2149,4 +2319,505 @@ function setupEventListeners() {
   if (btnExport) {
     btnExport.addEventListener("click", exportDataBackup);
   }
+
+  const archiveSearch = document.getElementById("archiveSearchInput");
+  if (archiveSearch) {
+    archiveSearch.addEventListener("input", renderArchiveRecordsTable);
+  }
+}
+
+/* ==========================================================================
+   YEARLY DATA BACKUP & ANNUAL AUDIT MODULE
+   ========================================================================== */
+function openYearlyBackupModal() {
+  switchToTab("tab-settings");
+  const el = document.getElementById("yearlyBackupSelect");
+  if (el) {
+    el.scrollIntoView({ behavior: "smooth", block: "center" });
+    updateYearlyBackupStats();
+  }
+}
+
+function updateYearlyBackupStats() {
+  const select = document.getElementById("yearlyBackupSelect");
+  if (!select) return;
+  const year = select.value;
+
+  const lblJson = document.getElementById("lblYearJson");
+  const lblCsv = document.getElementById("lblYearCsv");
+  if (lblJson) lblJson.textContent = year;
+  if (lblCsv) lblCsv.textContent = year;
+
+  const filteredSales = year === "ALL" 
+    ? appState.sales 
+    : appState.sales.filter(s => (s.saleDate || "").startsWith(year));
+
+  const totalRev = filteredSales.reduce((acc, s) => acc + (s.grandTotal || 0), 0);
+  const totalCost = filteredSales.reduce((acc, s) => acc + (s.totalCost || 0), 0);
+  const totalProfit = filteredSales.reduce((acc, s) => acc + (s.profit || 0), 0);
+  const marginPct = totalCost > 0 ? ((totalProfit / totalCost) * 100).toFixed(1) : 0;
+
+  const summaryEl = document.getElementById("yearlyBackupStatSummary");
+  if (summaryEl) {
+    if (filteredSales.length === 0) {
+      summaryEl.innerHTML = `<strong>${year}:</strong> 0 Sales recorded in active showroom database.`;
+    } else {
+      summaryEl.innerHTML = `
+        <strong>${year}:</strong> ${filteredSales.length} Units Sold | 
+        Rev: <strong>${formatINR(totalRev)}</strong> | 
+        Profit: <strong style="color:#10b981;">+${formatINR(totalProfit)} (${marginPct}%)</strong>
+      `;
+    }
+  }
+}
+
+function downloadYearlyPackage(type) {
+  const select = document.getElementById("yearlyBackupSelect");
+  const year = select ? select.value : "2026";
+
+  const filteredSales = year === "ALL" 
+    ? appState.sales 
+    : appState.sales.filter(s => (s.saleDate || "").startsWith(year));
+
+  if (filteredSales.length === 0) {
+    alert(`No sales records found for year ${year} in active database.`);
+    return;
+  }
+
+  const totalRev = filteredSales.reduce((acc, s) => acc + (s.grandTotal || 0), 0);
+  const totalCost = filteredSales.reduce((acc, s) => acc + (s.totalCost || 0), 0);
+  const totalProfit = filteredSales.reduce((acc, s) => acc + (s.profit || 0), 0);
+
+  if (type === "JSON") {
+    const backupPackage = {
+      archiveType: "YEARLY_SALES_AND_INVENTORY_BACKUP",
+      backupYear: year,
+      exportedAt: new Date().toISOString(),
+      showroom: { ...appState.settings },
+      metrics: {
+        totalUnitsSold: filteredSales.length,
+        totalSalesRevenue: totalRev,
+        totalProcurementCost: totalCost,
+        netRealizedProfit: totalProfit
+      },
+      sales: filteredSales,
+      currentInventorySnapshot: appState.bikes
+    };
+
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(backupPackage, null, 2));
+    const dl = document.createElement("a");
+    dl.setAttribute("href", dataStr);
+    dl.setAttribute("download", `Bike_Dilado_Yearly_Backup_${year}_${new Date().toISOString().split("T")[0]}.json`);
+    document.body.appendChild(dl);
+    dl.click();
+    dl.remove();
+    showToast(`Yearly Backup Package for ${year} downloaded as JSON!`);
+  } else if (type === "CSV") {
+    const headers = [
+      "Invoice No", "Date", "Bike Brand", "Model", "Reg No", "Mfg Year", "Buyer Name",
+      "Buyer Phone", "Buyer ID Proof", "Sale Amount (INR)", "Procure Cost (INR)",
+      "Refurb Cost (INR)", "Total Cost (INR)", "Gross Profit (INR)", "Payment Mode", "RTO Status"
+    ];
+
+    const rows = filteredSales.map(s => [
+      `"${s.invoiceNo}"`,
+      `"${s.saleDate}"`,
+      `"${s.brand}"`,
+      `"${s.model}"`,
+      `"${s.regNo}"`,
+      s.year,
+      `"${s.customer ? s.customer.name : ''}"`,
+      `"${s.customer ? s.customer.phone : ''}"`,
+      `"${s.customer ? (s.customer.idType + ' - ' + s.customer.idNumber) : ''}"`,
+      s.grandTotal || 0,
+      s.purchaseCost || 0,
+      s.refurbCost || 0,
+      s.totalCost || 0,
+      s.profit || 0,
+      `"${s.paymentMode || ''}"`,
+      `"${s.rtoStatus || ''}"`
+    ]);
+
+    const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `Bike_Dilado_Sales_Audit_${year}_${new Date().toISOString().split("T")[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast(`Sales Audit Sheet for ${year} exported to CSV!`);
+  }
+}
+
+function printAnnualAuditReport() {
+  const select = document.getElementById("yearlyBackupSelect");
+  const year = select ? select.value : "2026";
+
+  const salesList = year === "ALL" 
+    ? [...appState.sales] 
+    : appState.sales.filter(s => (s.saleDate || "").startsWith(year));
+
+  let displayList = salesList;
+  if (displayList.length === 0 && year === "2025") {
+    displayList = SAMPLE_2025_SALES;
+  }
+
+  // Populate Header
+  document.getElementById("auditShowroomName").textContent = appState.settings.showroomName || "BIKE DILADO";
+  document.getElementById("auditShowroomAddress").textContent = appState.settings.address || "";
+  document.getElementById("auditGstin").textContent = appState.settings.gstin || "27AABCB1234F1Z8";
+  document.getElementById("auditPhone").textContent = appState.settings.phone || "";
+  document.getElementById("auditPeriodLabel").textContent = year === "ALL" ? "Cumulative Showroom All-Time" : `Calendar Year ${year}`;
+  document.getElementById("auditGeneratedDate").textContent = new Date().toLocaleDateString("en-IN");
+  document.getElementById("auditTableYearLabel").textContent = year;
+
+  // Compute Totals
+  const totalUnits = displayList.length;
+  const totalRev = displayList.reduce((acc, s) => acc + (s.grandTotal || 0), 0);
+  const totalCost = displayList.reduce((acc, s) => acc + (s.totalCost || 0), 0);
+  const totalProfit = displayList.reduce((acc, s) => acc + (s.profit || 0), 0);
+  const avgMargin = totalCost > 0 ? ((totalProfit / totalCost) * 100).toFixed(1) : 0;
+
+  document.getElementById("auditUnitsVal").textContent = `${totalUnits} Units`;
+  document.getElementById("auditRevenueVal").textContent = formatINR(totalRev);
+  document.getElementById("auditCostVal").textContent = formatINR(totalCost);
+  document.getElementById("auditProfitVal").textContent = formatINR(totalProfit);
+  document.getElementById("auditMarginVal").textContent = `${avgMargin}%`;
+
+  document.getElementById("auditFootCost").textContent = formatINR(totalCost);
+  document.getElementById("auditFootRevenue").textContent = formatINR(totalRev);
+  document.getElementById("auditFootProfit").textContent = formatINR(totalProfit);
+
+  // Table Body
+  const tbody = document.getElementById("auditTableBody");
+  tbody.innerHTML = "";
+
+  if (displayList.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding: 20px; color:#64748b;">No delivery transactions recorded for ${year}.</td></tr>`;
+  } else {
+    displayList.forEach((s, idx) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${idx + 1}</td>
+        <td>
+          <strong>${s.invoiceNo}</strong><br>
+          <small style="color:#64748b;">${s.saleDate}</small>
+        </td>
+        <td>
+          <strong>${s.brand} ${s.model}</strong><br>
+          <span style="font-family:monospace; font-weight:700;">${s.regNo}</span> (${s.year})
+        </td>
+        <td>
+          <strong>${s.customer ? s.customer.name : 'Walk-in Buyer'}</strong><br>
+          <small style="color:#64748b;">${s.customer ? s.customer.phone : ''}</small>
+        </td>
+        <td>${formatINR(s.totalCost)}</td>
+        <td><strong>${formatINR(s.grandTotal)}</strong></td>
+        <td style="text-align:right; color:#16a34a; font-weight:700;">+${formatINR(s.profit)}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  openModal("modalYearlyAudit");
+}
+
+/* ==========================================================================
+   HISTORICAL SALES & EXPORTED ARCHIVE EXPLORER
+   ========================================================================== */
+function openArchiveExplorerModal() {
+  openModal("modalArchiveViewer");
+  if (!activeArchiveData.sales || activeArchiveData.sales.length === 0) {
+    loadActiveArchiveIntoViewer();
+  }
+}
+
+function loadActiveArchiveIntoViewer() {
+  activeArchiveData = {
+    sourceName: "Active Showroom Database (Current)",
+    sales: JSON.parse(JSON.stringify(appState.sales)),
+    period: "Live Showroom Sales",
+    isExternal: false
+  };
+  populateArchiveViewerState();
+}
+
+function loadSampleHistoricalArchive() {
+  activeArchiveData = {
+    sourceName: "2025 Annual Historical Sales Backup (Demo Archive)",
+    sales: JSON.parse(JSON.stringify(SAMPLE_2025_SALES)),
+    period: "Calendar Year 2025",
+    isExternal: true
+  };
+  populateArchiveViewerState();
+  showToast("Loaded 2025 historical archive with 4 verified sales!");
+}
+
+function handleArchiveFileSelected(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    try {
+      const parsed = JSON.parse(evt.target.result);
+      let salesList = [];
+      let period = "Exported File";
+
+      if (Array.isArray(parsed)) {
+        salesList = parsed;
+      } else if (parsed.sales && Array.isArray(parsed.sales)) {
+        salesList = parsed.sales;
+        period = parsed.backupYear ? `Year ${parsed.backupYear}` : (parsed.exportedAt ? new Date(parsed.exportedAt).toLocaleDateString() : "Archive File");
+      } else if (parsed.sales) {
+        salesList = Object.values(parsed.sales);
+      }
+
+      if (salesList.length === 0) {
+        alert("The selected JSON file does not contain any recognizable sales records.");
+        return;
+      }
+
+      activeArchiveData = {
+        sourceName: file.name,
+        sales: salesList,
+        period: period,
+        isExternal: true
+      };
+
+      populateArchiveViewerState();
+      showToast(`Loaded ${salesList.length} sales from ${file.name}!`);
+    } catch (err) {
+      alert("Error reading backup JSON file: " + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+function populateArchiveViewerState() {
+  const lbl = document.getElementById("archiveSourceLabel");
+  if (lbl) lbl.textContent = activeArchiveData.sourceName;
+
+  const sales = activeArchiveData.sales || [];
+  const metaStrip = document.getElementById("archiveMetaStrip");
+  const toolbar = document.getElementById("archiveFilterToolbar");
+  const tableContainer = document.getElementById("archiveTableContainer");
+  const placeholder = document.getElementById("archiveEmptyPlaceholder");
+  const btnMerge = document.getElementById("btnMergeArchiveData");
+
+  if (sales.length === 0) {
+    if (metaStrip) metaStrip.style.display = "none";
+    if (toolbar) toolbar.style.display = "none";
+    if (tableContainer) tableContainer.style.display = "none";
+    if (placeholder) placeholder.style.display = "block";
+    if (btnMerge) btnMerge.style.display = "none";
+    return;
+  }
+
+  if (metaStrip) metaStrip.style.display = "grid";
+  if (toolbar) toolbar.style.display = "flex";
+  if (tableContainer) tableContainer.style.display = "block";
+  if (placeholder) placeholder.style.display = "none";
+  if (btnMerge) btnMerge.style.display = "inline-flex";
+
+  const totalRev = sales.reduce((acc, s) => acc + (s.grandTotal || 0), 0);
+  const totalCost = sales.reduce((acc, s) => acc + (s.totalCost || 0), 0);
+  const totalProfit = sales.reduce((acc, s) => acc + (s.profit || 0), 0);
+
+  document.getElementById("amsDate").textContent = activeArchiveData.period || "Multiple Years";
+  document.getElementById("amsUnits").textContent = `${sales.length} Units`;
+  document.getElementById("amsRevenue").textContent = formatINR(totalRev);
+  document.getElementById("amsCost").textContent = formatINR(totalCost);
+  document.getElementById("amsProfit").textContent = formatINR(totalProfit);
+
+  renderArchiveRecordsTable();
+}
+
+function renderArchiveRecordsTable() {
+  const tbody = document.getElementById("archiveTableBody");
+  if (!tbody) return;
+  tbody.innerHTML = "";
+
+  const query = (document.getElementById("archiveSearchInput")?.value || "").toLowerCase().trim();
+  const yearFilter = document.getElementById("filterArchiveYear")?.value || "ALL";
+
+  let list = [...(activeArchiveData.sales || [])];
+
+  if (yearFilter !== "ALL") {
+    list = list.filter(s => (s.saleDate || "").startsWith(yearFilter));
+  }
+
+  if (query) {
+    list = list.filter(s => {
+      const inv = (s.invoiceNo || "").toLowerCase();
+      const name = (s.customer?.name || "").toLowerCase();
+      const phone = (s.customer?.phone || "").toLowerCase();
+      const reg = (s.regNo || "").toLowerCase();
+      const bike = `${s.brand || ''} ${s.model || ''}`.toLowerCase();
+      return inv.includes(query) || name.includes(query) || phone.includes(query) || reg.includes(query) || bike.includes(query);
+    });
+  }
+
+  if (list.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:24px; color:var(--text-muted);">No sales records match your filter criteria in this archive.</td></tr>`;
+    return;
+  }
+
+  list.forEach(sale => {
+    const profitMargin = sale.totalCost > 0 ? ((sale.profit / sale.totalCost) * 100).toFixed(1) : 0;
+    const isAlreadyInActive = appState.sales.some(s => s.invoiceNo === sale.invoiceNo);
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+      <td>
+        <strong>${sale.invoiceNo}</strong>
+        ${isAlreadyInActive ? '<span class="badge-tag green" style="font-size:9px; margin-left:4px;">In System</span>' : '<span class="badge-tag amber" style="font-size:9px; margin-left:4px;">Archive Only</span>'}
+        <div class="inv-item-sub">📅 ${sale.saleDate}</div>
+      </td>
+      <td>
+        <div class="tb-bike-title">${sale.brand} ${sale.model}</div>
+        <div class="tb-bike-sub"><span class="highlight-reg">${sale.regNo}</span> • ${sale.year}</div>
+      </td>
+      <td>
+        <div><strong>${sale.customer?.name || 'Customer'}</strong></div>
+        <div class="tb-bike-sub">📞 ${sale.customer?.phone || 'N/A'}</div>
+      </td>
+      <td>
+        <strong>${formatINR(sale.grandTotal)}</strong>
+        <div class="inv-item-sub">${sale.paymentMode || 'Paid'}</div>
+      </td>
+      <td>
+        <div>${formatINR(sale.totalCost)}</div>
+      </td>
+      <td>
+        <strong style="color: #10b981; font-size: 14px;">+${formatINR(sale.profit)}</strong>
+        <span class="badge-tag green" style="display:inline-block; font-size: 10px; margin-top: 2px;">${profitMargin}% Margin</span>
+      </td>
+      <td>
+        ${sale.balance > 0 ? `<span style="color:#ef4444; font-weight:700;">Due ₹${sale.balance.toLocaleString()}</span>` : `<span style="color:#10b981; font-weight:700;">Paid in Full</span>`}
+      </td>
+      <td>
+        <span class="badge-tag">${sale.rtoStatus || 'RC Transferred'}</span>
+      </td>
+      <td>
+        <div style="display:flex; gap: 4px;">
+          <button class="btn btn-primary btn-xs" onclick="openOldSaleDetail('${sale.invoiceNo}')" title="Inspect Full Sale Record Dossier">
+            👁️ Details
+          </button>
+          <button class="btn btn-outline btn-xs" onclick="reprintArchiveInvoice('${sale.invoiceNo}')" title="Reprint Official Invoice">
+            🧾 Bill
+          </button>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function openOldSaleDetail(invoiceNo) {
+  let sale = (activeArchiveData.sales || []).find(s => s.invoiceNo === invoiceNo);
+  if (!sale) {
+    sale = appState.sales.find(s => s.invoiceNo === invoiceNo);
+  }
+  if (!sale) {
+    sale = SAMPLE_2025_SALES.find(s => s.invoiceNo === invoiceNo);
+  }
+  if (!sale) {
+    alert("Record not found for invoice: " + invoiceNo);
+    return;
+  }
+
+  currentViewingArchiveSale = sale;
+  currentViewingSale = sale;
+
+  // Populate Header & Summary Strip
+  document.getElementById("osdTitle").textContent = `Historical Sale Record Dossier: ${sale.invoiceNo}`;
+  document.getElementById("osdSubtitle").textContent = `${sale.brand} ${sale.model} (${sale.regNo}) • Delivered on ${sale.saleDate}`;
+  document.getElementById("osdInvoiceNo").textContent = sale.invoiceNo;
+  document.getElementById("osdSaleDate").textContent = sale.saleDate;
+  document.getElementById("osdPayMode").textContent = sale.paymentMode || "Direct Payment";
+  document.getElementById("osdProfit").textContent = `+${formatINR(sale.profit || 0)}`;
+
+  // Customer Information
+  const c = sale.customer || {};
+  document.getElementById("osdCustName").textContent = c.name || "N/A";
+  document.getElementById("osdCustPhone").textContent = c.phone || "N/A";
+  document.getElementById("osdCustId").textContent = c.idType ? `${c.idType} (${c.idNumber || 'Verified'})` : "Verified Aadhaar / DL";
+  document.getElementById("osdCustCity").textContent = c.city || "Mumbai";
+  document.getElementById("osdCustAddress").textContent = c.address || "Showroom Registered Buyer";
+
+  // Vehicle Specifications
+  document.getElementById("osdBikeModel").textContent = `${sale.brand} ${sale.model}`;
+  document.getElementById("osdRegNo").textContent = sale.regNo;
+  document.getElementById("osdYearKm").textContent = `${sale.year} | ${(sale.kms || 0).toLocaleString()} km | ${sale.owners || '1st Owner'}`;
+  document.getElementById("osdEngine").textContent = sale.engine || "Verified & Inspected";
+  document.getElementById("osdChassis").textContent = sale.chassis || "Verified & Inspected";
+
+  // Financial Breakdown
+  const procure = sale.purchaseCost || (sale.totalCost ? sale.totalCost - (sale.refurbCost || 0) : 0);
+  const refurb = sale.refurbCost || 0;
+  const addons = (sale.rtoFee || 0) + (sale.accessories || 0) + (sale.warranty || 0);
+
+  document.getElementById("osdProcureCost").textContent = formatINR(procure);
+  document.getElementById("osdRefurbCost").textContent = formatINR(refurb);
+  document.getElementById("osdTotalCost").textContent = formatINR(sale.totalCost || (procure + refurb));
+  document.getElementById("osdAgreedPrice").textContent = formatINR(sale.agreedPrice || sale.grandTotal);
+  document.getElementById("osdDiscount").textContent = sale.discount > 0 ? `-${formatINR(sale.discount)}` : "₹0";
+  document.getElementById("osdAddons").textContent = formatINR(addons);
+  document.getElementById("osdGrandTotal").textContent = formatINR(sale.grandTotal);
+  document.getElementById("osdPaid").textContent = formatINR(sale.amountPaid);
+  document.getElementById("osdBalance").textContent = formatINR(sale.balance || 0);
+
+  // RTO & Paperwork
+  document.getElementById("osdRtoStage").textContent = sale.rtoStatus || "Completed";
+  document.getElementById("osdWarranty").textContent = sale.warrantyTerms || "Certified Showroom Powertrain Guarantee";
+  document.getElementById("osdPayNotes").textContent = sale.paymentRef || (sale.paymentNotes || "Showroom Verified Transaction");
+
+  openModal("modalOldSaleDetail");
+}
+
+function reprintFromOsd() {
+  if (currentViewingArchiveSale) {
+    closeModal("modalOldSaleDetail");
+    renderInvoiceModal(currentViewingArchiveSale);
+  }
+}
+
+function reprintArchiveInvoice(invoiceNo) {
+  let sale = (activeArchiveData.sales || []).find(s => s.invoiceNo === invoiceNo);
+  if (!sale) sale = appState.sales.find(s => s.invoiceNo === invoiceNo);
+  if (!sale) sale = SAMPLE_2025_SALES.find(s => s.invoiceNo === invoiceNo);
+  if (sale) {
+    renderInvoiceModal(sale);
+  }
+}
+
+function mergeArchiveRecordsIntoSystem() {
+  const archiveSales = activeArchiveData.sales || [];
+  if (archiveSales.length === 0) {
+    alert("No records in current archive to merge.");
+    return;
+  }
+
+  let addedCount = 0;
+  let updatedCount = 0;
+
+  archiveSales.forEach(rec => {
+    const existingIdx = appState.sales.findIndex(s => s.invoiceNo === rec.invoiceNo);
+    if (existingIdx !== -1) {
+      appState.sales[existingIdx] = { ...appState.sales[existingIdx], ...rec };
+      updatedCount++;
+    } else {
+      appState.sales.unshift({ ...rec });
+      addedCount++;
+    }
+  });
+
+  saveState();
+  renderAllViews();
+  populateArchiveViewerState();
+  updateYearlyBackupStats();
+
+  showToast(`Successfully merged: ${addedCount} new records added, ${updatedCount} existing updated!`);
 }

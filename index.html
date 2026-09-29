@@ -771,6 +771,12 @@
               <p class="page-desc">Complete archive of closed sales, realized profit margins, pending balance collector & RTO transfer tracking.</p>
             </div>
             <div class="header-tools">
+              <button class="btn btn-outline" onclick="openYearlyBackupModal()">
+                📅 Yearly Backup & Audit
+              </button>
+              <button class="btn btn-accent" onclick="openArchiveExplorerModal()">
+                📂 Inspect Exported Data / Old Records
+              </button>
               <button class="btn btn-outline" onclick="exportSoldToCSV()">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -813,6 +819,13 @@
             </div>
 
             <div class="filter-group">
+              <select id="filterSoldYear" class="select-control" onchange="renderSoldTable()">
+                <option value="ALL">All Years (All-Time)</option>
+                <option value="2026" selected>Year 2026</option>
+                <option value="2025">Year 2025</option>
+                <option value="2024">Year 2024</option>
+              </select>
+
               <select id="filterRtoStatus" class="select-control" onchange="renderSoldTable()">
                 <option value="ALL">All RTO Paper Statuses</option>
                 <option value="Documents Submitted">Documents Submitted to RTO</option>
@@ -1131,29 +1144,76 @@
               </form>
             </div>
 
-            <!-- Right: Database Management -->
+            <!-- Right: Database Management & Yearly Archives -->
             <div class="form-card">
-              <h3 class="form-card-title">Database Storage & Backup</h3>
-              <p class="card-desc">All your inventory, billing, leads, and sales records are stored locally with instant browser persistence.</p>
+              <h3 class="form-card-title">📅 Annual & Yearly Data Backup</h3>
+              <p class="card-desc">Generate official yearly backup archives, download annual financial audit reports, and export sales by year.</p>
 
+              <div class="yearly-backup-box">
+                <div class="form-row-2 mb-2">
+                  <div class="form-group mb-0">
+                    <label for="yearlyBackupSelect">Select Calendar / Financial Year</label>
+                    <select id="yearlyBackupSelect" class="form-control" onchange="updateYearlyBackupStats()">
+                      <option value="2026" selected>Year 2026 (Current Year)</option>
+                      <option value="2025">Year 2025</option>
+                      <option value="2024">Year 2024</option>
+                      <option value="ALL">All-Time Cumulative</option>
+                    </select>
+                  </div>
+                  <div class="form-group mb-0">
+                    <label>Selected Year Performance</label>
+                    <div class="yearly-mini-stat" id="yearlyBackupStatSummary">
+                      Calculating...
+                    </div>
+                  </div>
+                </div>
+
+                <div class="yearly-btn-row">
+                  <button class="btn btn-primary btn-sm" onclick="downloadYearlyPackage('JSON')">
+                    💾 Download <span id="lblYearJson">2026</span> JSON
+                  </button>
+                  <button class="btn btn-outline btn-sm" onclick="downloadYearlyPackage('CSV')">
+                    📊 Download <span id="lblYearCsv">2026</span> CSV
+                  </button>
+                  <button class="btn btn-outline btn-sm" onclick="printAnnualAuditReport()">
+                    📑 Print Annual Audit
+                  </button>
+                </div>
+              </div>
+
+              <h3 class="form-card-title mt-4">📂 Historical Sales & Archive Inspector</h3>
+              <p class="card-desc">Inspect old sales data from previously exported backup files. Review full details, customer information, vehicle specs, and optionally merge into your database.</p>
+
+              <div class="backup-box">
+                <div class="bb-icon">🔍</div>
+                <div class="bb-text">
+                  <h4>Old Sell Records Explorer</h4>
+                  <p>Browse any exported backup file without overwriting your current inventory, or merge records with deduplication.</p>
+                </div>
+                <button class="btn btn-accent" onclick="openArchiveExplorerModal()">
+                  Open Archive Explorer
+                </button>
+              </div>
+
+              <h3 class="form-card-title mt-4">💾 Full Showroom Backup & Restore</h3>
               <div class="backup-actions">
                 <div class="backup-box">
                   <div class="bb-icon">💾</div>
                   <div class="bb-text">
-                    <h4>Export Full Showroom Backup</h4>
-                    <p>Download a complete JSON file containing all bikes, active stock, invoices, job cards, and leads.</p>
+                    <h4>Export Full System Backup</h4>
+                    <p>Download complete JSON snapshot of all inventory, sales, leads, and showroom settings.</p>
                   </div>
-                  <button class="btn btn-outline" onclick="exportDataBackup()">Download JSON</button>
+                  <button class="btn btn-outline" onclick="exportDataBackup()">Download Full JSON</button>
                 </div>
 
                 <div class="backup-box">
-                  <div class="bb-icon">📂</div>
+                  <div class="bb-icon">📥</div>
                   <div class="bb-text">
-                    <h4>Restore / Import Backup</h4>
-                    <p>Restore your showroom records from a previously exported backup file.</p>
+                    <h4>Restore Entire Database</h4>
+                    <p>Restore all showroom records from an existing backup JSON file.</p>
                   </div>
                   <label class="btn btn-outline file-input-label">
-                    Choose File
+                    Choose Backup File
                     <input type="file" id="importFileInput" accept=".json" onchange="importDataBackup(event)" style="display:none;">
                   </label>
                 </div>
@@ -1162,7 +1222,7 @@
                   <div class="bb-icon">⚠️</div>
                   <div class="bb-text">
                     <h4>Reset to Sample Demo Data</h4>
-                    <p>Reset inventory to preloaded bikes (Royal Enfield, Yamaha R15, KTM Duke, Activa) and test records.</p>
+                    <p>Reset inventory to factory demo bikes and test transaction records.</p>
                   </div>
                   <button class="btn btn-danger-outline" onclick="resetToSampleData()">Reset Demo Data</button>
                 </div>
@@ -1939,6 +1999,343 @@
       <div class="modal-footer no-print">
         <button class="btn btn-outline" onclick="closeModal('modalPurchaseVoucher')">Close</button>
         <button class="btn btn-primary" onclick="window.print()">Print Agreement</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: EXPORTED BACKUP & OLD SALES EXPLORER    -->
+  <!-- ============================================== -->
+  <div id="modalArchiveViewer" class="modal-backdrop">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <div class="modal-badge-icon">📂</div>
+          <div>
+            <h3 class="modal-title">Historical Sales & Exported Archive Explorer</h3>
+            <p class="modal-subtitle">Inspect past exported backup files, check old sell records, and optionally merge into active system.</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('modalArchiveViewer')">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- File Loader / Preset Bar -->
+        <div class="archive-loader-card">
+          <div class="alc-left">
+            <label class="btn btn-primary file-input-label">
+              📁 Choose Exported JSON File
+              <input type="file" id="archiveFileLoaderInput" accept=".json" onchange="handleArchiveFileSelected(event)" style="display:none;">
+            </label>
+            <button class="btn btn-outline" onclick="loadActiveArchiveIntoViewer()">
+              Load Current Showroom Sales Archive
+            </button>
+            <button class="btn btn-outline" onclick="loadSampleHistoricalArchive()">
+              Load 2025 Sample Historical Archive
+            </button>
+          </div>
+          <div class="alc-right">
+            <span class="archive-source-pill" id="archiveSourceLabel">No file loaded yet</span>
+          </div>
+        </div>
+
+        <!-- Archive Metrics Strip -->
+        <div class="archive-meta-strip" id="archiveMetaStrip" style="display:none;">
+          <div class="ams-item">
+            <span class="ams-lbl">Archive Period / Date</span>
+            <strong class="ams-val" id="amsDate">--</strong>
+          </div>
+          <div class="ams-item">
+            <span class="ams-lbl">Total Sold Units</span>
+            <strong class="ams-val" id="amsUnits">0 Units</strong>
+          </div>
+          <div class="ams-item">
+            <span class="ams-lbl">Gross Sales Revenue</span>
+            <strong class="ams-val" id="amsRevenue">₹0</strong>
+          </div>
+          <div class="ams-item">
+            <span class="ams-lbl">Total Procurement Cost</span>
+            <strong class="ams-val" id="amsCost">₹0</strong>
+          </div>
+          <div class="ams-item highlight-green">
+            <span class="ams-lbl">Realized Net Profit</span>
+            <strong class="ams-val" id="amsProfit">₹0</strong>
+          </div>
+        </div>
+
+        <!-- Archive Search & Filter Toolbar -->
+        <div class="filter-toolbar mt-3" id="archiveFilterToolbar" style="display:none;">
+          <div class="search-box">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="text" id="archiveSearchInput" placeholder="Search old records by Invoice, Customer, Reg No...">
+          </div>
+
+          <div class="filter-group">
+            <select id="filterArchiveYear" class="select-control" onchange="renderArchiveRecordsTable()">
+              <option value="ALL">All Years in Archive</option>
+              <option value="2026">Year 2026</option>
+              <option value="2025">Year 2025</option>
+              <option value="2024">Year 2024</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Archive Table -->
+        <div class="table-responsive mt-2" id="archiveTableContainer" style="display:none; max-height: 420px; overflow-y: auto;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Invoice &amp; Date</th>
+                <th>Vehicle Info</th>
+                <th>Customer / Buyer</th>
+                <th>Sale Price</th>
+                <th>Showroom Cost</th>
+                <th>Profit (Margin)</th>
+                <th>Payment Status</th>
+                <th>RTO Paper Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="archiveTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Empty / Guide State -->
+        <div id="archiveEmptyPlaceholder" class="empty-state">
+          <div class="empty-icon">📂</div>
+          <h3>Select or Drop an Exported File</h3>
+          <p>Choose any previous backup JSON file or click "Load Current Showroom Sales Archive" to inspect all historical sell records and check customer details.</p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('modalArchiveViewer')">Close</button>
+        <button class="btn btn-primary" id="btnMergeArchiveData" onclick="mergeArchiveRecordsIntoSystem()" style="display:none;">
+          ⚡ Merge &amp; Add These Records into Showroom System
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: OLD SALE FULL DETAILS INSPECTOR         -->
+  <!-- ============================================== -->
+  <div id="modalOldSaleDetail" class="modal-backdrop">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <div class="modal-badge-icon">📋</div>
+          <div>
+            <h3 class="modal-title" id="osdTitle">Historical Sale Record Dossier</h3>
+            <p class="modal-subtitle" id="osdSubtitle">Invoice &amp; Delivery Particulars</p>
+          </div>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal('modalOldSaleDetail')">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="osd-summary-strip">
+          <div class="osd-stat">
+            <span>Invoice No:</span>
+            <strong id="osdInvoiceNo">BD-2026-0089</strong>
+          </div>
+          <div class="osd-stat">
+            <span>Sale Date:</span>
+            <strong id="osdSaleDate">2026-09-22</strong>
+          </div>
+          <div class="osd-stat">
+            <span>Payment Mode:</span>
+            <strong id="osdPayMode">UPI / Online</strong>
+          </div>
+          <div class="osd-stat highlight">
+            <span>Showroom Profit:</span>
+            <strong style="color: #10b981;" id="osdProfit">+₹14,000</strong>
+          </div>
+        </div>
+
+        <div class="osd-grid mt-3">
+          <!-- Card 1: Customer Profile -->
+          <div class="osd-card">
+            <h4 class="osd-card-title">👤 Customer / Buyer Information</h4>
+            <div class="osd-row"><span>Full Name:</span><strong id="osdCustName">Rajesh Sharma</strong></div>
+            <div class="osd-row"><span>Mobile:</span><strong id="osdCustPhone">+91 98201 44552</strong></div>
+            <div class="osd-row"><span>ID Proof:</span><strong id="osdCustId">Aadhaar (5544 3322 1100)</strong></div>
+            <div class="osd-row"><span>City / Area:</span><strong id="osdCustCity">Mumbai</strong></div>
+            <div class="osd-row"><span>Full Address:</span><span id="osdCustAddress">B-203, Gokul Dham, Goregaon East, Mumbai</span></div>
+          </div>
+
+          <!-- Card 2: Vehicle Dossier -->
+          <div class="osd-card">
+            <h4 class="osd-card-title">🏍️ Two-Wheeler Specifications</h4>
+            <div class="osd-row"><span>Make &amp; Model:</span><strong id="osdBikeModel">Bajaj Pulsar NS200</strong></div>
+            <div class="osd-row"><span>Registration No:</span><strong class="highlight-reg" id="osdRegNo">MH 04 KP 3218</strong></div>
+            <div class="osd-row"><span>Mfg Year / KM:</span><strong id="osdYearKm">2022 | 19,000 km</strong></div>
+            <div class="osd-row"><span>Engine Number:</span><strong id="osdEngine">DHZWD77192</strong></div>
+            <div class="osd-row"><span>Chassis / VIN:</span><strong id="osdChassis">MD2A24FZ7N90182</strong></div>
+          </div>
+        </div>
+
+        <div class="osd-grid mt-3">
+          <!-- Card 3: Financial Settlement -->
+          <div class="osd-card">
+            <h4 class="osd-card-title">💰 Financial &amp; Cost Breakdown</h4>
+            <div class="osd-row"><span>Procurement Cost:</span><span id="osdProcureCost">₹88,000</span></div>
+            <div class="osd-row"><span>Refurbishment / Workshop:</span><span id="osdRefurbCost">₹4,000</span></div>
+            <div class="osd-row"><span>Total Showroom Cost:</span><strong id="osdTotalCost">₹92,000</strong></div>
+            <div class="osd-row"><span>Agreed Sale Price:</span><strong id="osdAgreedPrice">₹1,08,000</strong></div>
+            <div class="osd-row"><span>Discount Given:</span><span style="color:#ef4444;" id="osdDiscount">-₹2,000</span></div>
+            <div class="osd-row"><span>RTO + Kit + Warranty:</span><span id="osdAddons">₹2,700</span></div>
+            <div class="osd-row" style="border-top: 1px solid var(--border-color); padding-top: 6px; margin-top: 6px;">
+              <span>Grand Total Invoiced:</span>
+              <strong style="color:var(--accent-gold); font-size:15px;" id="osdGrandTotal">₹1,08,700</strong>
+            </div>
+            <div class="osd-row"><span>Amount Paid:</span><strong style="color:#10b981;" id="osdPaid">₹95,000</strong></div>
+            <div class="osd-row"><span>Balance Remaining:</span><strong style="color:#ef4444;" id="osdBalance">₹13,700</strong></div>
+          </div>
+
+          <!-- Card 4: Paperwork & Undertaking -->
+          <div class="osd-card">
+            <h4 class="osd-card-title">📄 RTO Paperwork &amp; Delivery Terms</h4>
+            <div class="osd-row"><span>RTO Transfer Stage:</span><strong class="badge-tag green" id="osdRtoStage">RC Transferred</strong></div>
+            <div class="osd-row"><span>Warranty Terms:</span><span id="osdWarranty">3 Months Engine &amp; Gearbox Warranty + 1 Free Service</span></div>
+            <div class="osd-row"><span>Payment Ref / Notes:</span><span id="osdPayNotes">UPI-4267819921</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('modalOldSaleDetail')">Close</button>
+        <button class="btn btn-primary" id="btnReprintFromOsd" onclick="reprintFromOsd()">
+          🧾 Reprint Official Invoice
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: ANNUAL AUDIT & YEARLY REPORT            -->
+  <!-- ============================================== -->
+  <div id="modalYearlyAudit" class="modal-backdrop">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-header no-print">
+        <div class="modal-title-wrap">
+          <div class="modal-badge-icon">📑</div>
+          <div>
+            <h3 class="modal-title">Official Annual Showroom Audit Statement</h3>
+            <p class="modal-subtitle">Printable executive summary for accounting, taxation &amp; inventory closing.</p>
+          </div>
+        </div>
+        <div class="modal-actions-right">
+          <button class="btn btn-accent" onclick="window.print()">
+            Print Audit Report (A4)
+          </button>
+          <button class="modal-close-btn" onclick="closeModal('modalYearlyAudit')">&times;</button>
+        </div>
+      </div>
+
+      <div class="modal-body print-area" id="annualAuditPrintContent">
+        <div class="inv-header">
+          <div class="inv-brand-left">
+            <div class="inv-logo-title" id="auditShowroomName">BIKE DILADO</div>
+            <div class="inv-logo-tagline">ANNUAL FINANCIAL &amp; VEHICLE INVENTORY AUDIT STATEMENT</div>
+            <div class="inv-address" id="auditShowroomAddress">
+              Plot 42, Link Road, Near Metro Pillar 114, Andheri West, Mumbai, MH - 400053
+            </div>
+            <div class="inv-contacts">
+              <span>GSTIN: <strong id="auditGstin">27AABCB1234F1Z8</strong></span> | 
+              <span>Phone: <strong id="auditPhone">+91 98200 12345</strong></span>
+            </div>
+          </div>
+          <div class="inv-title-right">
+            <div class="inv-pill">ANNUAL AUDIT STATEMENT</div>
+            <div><strong>Audit Period:</strong> <span id="auditPeriodLabel">Calendar Year 2026</span></div>
+            <div><strong>Generated:</strong> <span id="auditGeneratedDate">29-09-2026</span></div>
+          </div>
+        </div>
+
+        <hr class="inv-divider">
+
+        <!-- Executive Financial KPI Matrix -->
+        <div class="audit-matrix-grid">
+          <div class="am-box">
+            <span class="am-lbl">TOTAL UNITS SOLD</span>
+            <div class="am-val" id="auditUnitsVal">0</div>
+          </div>
+          <div class="am-box">
+            <span class="am-lbl">GROSS SALES REVENUE</span>
+            <div class="am-val" id="auditRevenueVal">₹0</div>
+          </div>
+          <div class="am-box">
+            <span class="am-lbl">PROCUREMENT &amp; REFURB COST</span>
+            <div class="am-val" id="auditCostVal">₹0</div>
+          </div>
+          <div class="am-box highlight">
+            <span class="am-lbl">NET REALIZED PROFIT</span>
+            <div class="am-val" style="color:#16a34a;" id="auditProfitVal">₹0</div>
+          </div>
+          <div class="am-box">
+            <span class="am-lbl">AVERAGE PROFIT MARGIN</span>
+            <div class="am-val" id="auditMarginVal">0%</div>
+          </div>
+        </div>
+
+        <!-- Audit Sales Table -->
+        <h4 class="mt-4 mb-2" style="font-size:13px; font-weight:800; text-transform:uppercase; color:#0f172a;">
+          Detailed Vehicle Deliveries Log for <span id="auditTableYearLabel">2026</span>
+        </h4>
+
+        <table class="inv-items-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Invoice No &amp; Date</th>
+              <th>Vehicle Make, Model &amp; Reg No</th>
+              <th>Buyer Particulars</th>
+              <th>Procurement Cost</th>
+              <th>Sale Price</th>
+              <th style="text-align: right;">Realized Profit</th>
+            </tr>
+          </thead>
+          <tbody id="auditTableBody">
+            <!-- Dynamically populated -->
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="4" style="text-align:right;"><strong>Annual Cumulative Totals:</strong></td>
+              <td id="auditFootCost">₹0</td>
+              <td id="auditFootRevenue">₹0</td>
+              <td style="text-align:right; color:#16a34a;"><strong id="auditFootProfit">₹0</strong></td>
+            </tr>
+          </tfoot>
+        </table>
+
+        <!-- Auditor & Manager Sign-off -->
+        <div class="inv-sign-row mt-4">
+          <div class="sign-block">
+            <div class="sign-line"></div>
+            <p>Showroom Accounts &amp; Inventory Auditor</p>
+          </div>
+          <div class="sign-stamp">
+            <div class="showroom-seal">
+              <span>BIKE DILADO</span>
+              <small>ANNUAL AUDIT VERIFIED</small>
+            </div>
+          </div>
+          <div class="sign-block">
+            <div class="sign-line"></div>
+            <p>Managing Director / Proprietor</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer no-print">
+        <button class="btn btn-outline" onclick="closeModal('modalYearlyAudit')">Close</button>
+        <button class="btn btn-primary" onclick="window.print()">Print Statement</button>
       </div>
     </div>
   </div>

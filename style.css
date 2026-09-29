@@ -2305,8 +2305,195 @@ body {
   font-size: 11.5px;
   font-weight: 800;
   color: #0f172a;
-  margin-bottom: 4px;
+/* ==========================================================================
+   YEARLY BACKUP & ARCHIVE EXPLORER STYLING
+   ========================================================================== */
+.yearly-backup-box {
+  background: rgba(245, 158, 11, 0.04);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 16px;
 }
+
+.yearly-mini-stat {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--accent-gold);
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+}
+
+.yearly-btn-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.archive-loader-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 14px;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.alc-left {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.archive-source-pill {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-light);
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.archive-meta-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 12px;
+}
+
+.ams-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ams-lbl {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.ams-val {
+  font-family: var(--font-heading);
+  font-size: 14.5px;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.ams-item.highlight-green .ams-val {
+  color: #10b981;
+}
+
+/* Old Sale Detail Dossier */
+.osd-summary-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+}
+
+.osd-stat {
+  display: flex;
+  flex-direction: column;
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+.osd-stat strong {
+  font-size: 14px;
+  color: var(--text-main);
+  font-family: var(--font-heading);
+}
+
+.osd-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.osd-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  padding: 14px;
+  border-radius: var(--radius-sm);
+}
+
+.osd-card-title {
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-gold);
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: 5px;
+}
+
+.osd-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11.5px;
+  color: var(--text-muted);
+  margin-bottom: 5px;
+  gap: 8px;
+}
+
+.osd-row strong {
+  color: var(--text-main);
+}
+
+/* Annual Audit Matrix */
+.audit-matrix-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.am-box {
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  padding: 9px;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.am-lbl {
+  font-size: 8.5px;
+  font-weight: 800;
+  color: #64748b;
+  display: block;
+}
+
+.am-val {
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-top: 3px;
+}
+
+.mb-0 { margin-bottom: 0 !important; }
+.mb-2 { margin-bottom: 8px !important; }
 
 /* ==========================================================================
    PRINT MEDIA RULES (Strict A4 Print Layout)
